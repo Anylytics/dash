@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dash - {% block title %}{% endblock %}</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/anylytics.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/animate.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dash.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+</head>
+<body>
+
+<script>
+var name = '{{ name }}';
+</script>
+
+<div>
+	<div class="navbar navbar-top">
+		<div class="navbar-inner">
+			<div class="container global-header">
+				<img id="header-logo" src="./static/img/anylytics.png"/><h2>Dash</h2>
+				{% if not session.logged_in %}
+				<a class='pull-right' href="{{ url_for('login') }}">log in</a>
+				{% else %}
+				<a class='pull-right' href="{{ url_for('logout') }}">log out</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% block main_content %}{% endblock %}
+
+ <!-- RequireJS means we use this plugin to load everything else! -->
+ <!-- See main.js -->
+<script data-main="./static/js/main" src="./static/js/lib/require.js"></script>
+
+</body>
+</html>

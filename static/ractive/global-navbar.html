@@ -1,0 +1,28 @@
+<div class="subnavbar">
+  <div class="subnavbar-inner">
+    <div class="container">
+      <ul class="mainnav">
+        <li class="{{ (name=='home') ? 'active' : '' }}">  
+        	<a href="./">
+        		<i class="glyphicon glyphicon-home"></i>
+        		<span>Home</span>
+        	</a>
+        </li>
+        <li class="{{ (name=='reports') ? 'active' : '' }}">
+        	<a href="reports">
+        		<i class="glyphicon glyphicon-dashboard"></i>
+        		<span>Reports</span>
+        	</a> 
+        </li>
+        <li class="{{ (name=='settings') ? 'active' : '' }}">
+        	<a href="settings">
+        		<i class="glyphicon glyphicon-cog"></i>
+        		<span>Settings</span>
+        	</a> 
+        </li>
+      </ul>
+    </div>
+    <!-- /container --> 
+  </div>
+  <!-- /subnavbar-inner --> 
+</div>

@@ -6,9 +6,10 @@ require.config({
         rv: 'loaders/rv',
         mapbox: 'lib/mapbox',
         jquery: 'lib/jquery-1.11',
-        jqueryui: 'lib/jquery_ui'
+        jqueryui: 'lib/jquery_ui',
+        bootstrap: 'bootstrap/bootstrap.min'
     }
 });
 
 
-require(["template"]);
+require(["global-navbar"]);
