@@ -68,7 +68,7 @@ body {
 	text-align: center;
 	list-style: none;
 	
-	border-left: 1px solid #d9d9d9;
+	//border-left: 1px solid #d9d9d9;
 	
 	
 }
@@ -82,12 +82,15 @@ body {
 	font-size: 12px;
 	font-weight: bold;
 	color: #b2afaa;
+	transition: color 0.2s ease;
 	text-decoration:none;
 }
 
 .subnavbar .container > ul > li > a:hover {
+	transition: color 0.2s ease;
 	color: #888;
 	text-decoration: none;
+	border-bottom:1px solid #54A148;
 }
 
 .subnavbar .container > ul > li > a > i {
@@ -107,10 +110,11 @@ body {
 
 
 .subnavbar .container > ul > li.active > a {
-	
 	border-bottom:3px solid #54A148;
 	color: #383838;
 	cursor:default;
+	border-left: 1px solid #d9d9d9;
+	border-right: 1px solid #d9d9d9;
 }
     
 

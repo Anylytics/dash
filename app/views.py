@@ -1,7 +1,8 @@
-from flask import Flask, render_template, abort, request, jsonify, redirect, url_for
+from app import app
+from flask import render_template, abort, request, jsonify, redirect, url_for
 
-app = Flask(__name__)
 
+@app.route('/index')
 @app.route('/')
 def home_page():
 	return render_template('index.html', name='home')
@@ -24,14 +25,10 @@ def login():
 		if request.form['username'] != 'admin' or request.form['password'] != 'admin':
 			error = 'Invalid Credentials. Please try again.'
 		else:
-			return redirect(url_for('home_page'))
+			return redirect(url_for('home_page'))#TODO pass auth token
 	return render_template('login.html', error=error)
 
 @app.route('/logout')
 def logout():
 	logout_user()
 	return redirect(url_for('login'))
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000, debug='True')
