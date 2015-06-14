@@ -3,8 +3,71 @@
 
 {% block main_content %}
 <div id="global-navbar"></div>
-<div style="text-align:center; ">
-    Welcome to the portal! <br/> 
-    We like fun & games
+<!--Define 2 column layout here-->
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="dash-widget">
+				<div class="dash-widget-header">
+					<h4><i class="glyphicon glyphicon-tasks"></i>Status Report</h4>
+				</div>
+				<div class="dash-widget-content">
+					<span>Unread status items:</span>
+					<!--TODO: Ractive cycle through active status report items from DB-->
+					<div class="dash-widget-line-item">
+						<div class="line-item-icon any-inline">
+							<i class="glyphicon glyphicon-exclamation-sign"></i>
+						</div>
+						<div class="line-item-content any-inline">
+							Hello World!
+						</div>
+					</div>
+					<div class="dash-widget-line-item">
+						<div class="line-item-icon any-inline">
+							<i class="glyphicon glyphicon-ok-circle"></i>
+						</div>
+						<div class="line-item-content any-inline">
+							My name is dash!
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="dash-widget">
+				<div class="dash-widget-header">
+					<h4><i class="glyphicon glyphicon-user"></i>Recent Activity</h4>
+				</div>
+				<div class="dash-widget-content">
+					<span>Activities from the past week:</span>
+				{% for update in updates %}
+					<div class="dash-widget-line-item">
+						<div class="line-item-icon any-inline">
+							<span class="sourceSans">{{ update.user.initial }}</span>
+						</div>
+						<div class="line-item-content any-inline">
+							{{ update.status }}
+						</div>
+					</div>
+				{% endfor %}
+				</div>
+			</div>
+
+		<!--<div id="status-widget-home"></div>-->
+		</div>
+		<div class="col-sm-6">
+			<div class="dash-widget">
+				<div class="dash-widget-header">
+					<h4><i class="glyphicon glyphicon-cloud-upload"></i>Data Upload</h4>
+				</div>
+				<div class="dash-widget-content">
+					<span class="hidden-xs">Drag + drop data files for upload here:</span>
+					<span class="visible-xs">Upload files:</span>
+					<div class="dash-widget-upload">
+						<h5 class="hidden-xs">Drop files here!</h5>
+						<h5 class="visible-xs">Tap to upload!</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}

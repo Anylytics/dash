@@ -22,11 +22,24 @@ var name = '{{ name }}';
 		<div class="navbar-inner">
 			<div class="container global-header">
 				<img id="header-logo" src="./static/img/anylytics.png"/><h2>Dash</h2>
+				{% if user %}
+					<div class="pull-right">Welcome, {{user.nickname}}</div>
+				{% endif %}
 				{% if not session.logged_in %}
 				<a class='pull-right' href="{{ url_for('login') }}">log in</a>
 				{% else %}
 				<a class='pull-right' href="{{ url_for('logout') }}">log out</a>
 				{% endif %}
+				
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }} </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 			</div>
 		</div>
 	</div>

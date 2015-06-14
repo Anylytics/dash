@@ -170,3 +170,58 @@ body {
 .subnavbar .dropdown.open .caret {
 	display: none;
 }
+
+
+/*********[Global Dash Widgets]*********/
+.dash-widget {
+	border: 1px solid #d6d6d6;
+	padding:10px;
+	margin:10px;
+}
+
+.dash-widget:hover {
+	border-color:#54A148;
+}
+
+.dash-widget-header {
+	border-bottom: 1px solid #d6d6d6;
+}
+
+.dash-widget-content {
+	padding:10px;
+}
+
+.dash-widget-content > span {
+	display:block;
+}
+
+.dash-widget-line-item {
+	border: 1px solid #d6d6d6;
+	padding: 20px 0 20px 0;
+	margin:10px;
+	background-color:#ededed;
+	transition: background-color 0.4s ease;
+}
+
+.dash-widget-line-item:hover {
+	transition: background-color 0.4s ease;
+	background-color:#dceeda;
+}
+
+.line-item-icon {
+	margin:20px;
+}
+
+h4 > .glyphicon {
+	margin-right:10px;
+}
+
+.dash-widget-upload {
+	border: 3px dashed #d6d6d6;
+	margin:5px;
+}
+
+.dash-widget-upload > h5 {
+	margin:25px;
+	text-align:center;
+}

@@ -12,4 +12,4 @@ require.config({
 });
 
 
-require(["global-navbar"]);
+require(["global-navbar","status-widget"]);

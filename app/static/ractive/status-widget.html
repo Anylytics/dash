@@ -1,0 +1,18 @@
+<div class="dash-widget">
+	<div class="dash-widget-header">
+		<h4><i class="glyphicon glyphicon-user"></i>Recent Activity</h4>
+	</div>
+	<div class="dash-widget-content">
+		<span>Activities from the past week:</span>
+	{% for update in updates %}
+		<div class="dash-widget-line-item">
+			<div class="line-item-icon any-inline">
+				<span class="sourceSans">{{ update.user.initial }}</span>
+			</div>
+			<div class="line-item-content any-inline">
+				{{ update.status }}
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</div>

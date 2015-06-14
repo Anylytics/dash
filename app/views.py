@@ -1,5 +1,6 @@
+from flask import render_template, flash, abort, request, jsonify, redirect, url_for
 from app import app
-from flask import render_template, abort, request, jsonify, redirect, url_for
+from .forms import LoginForm
 
 
 @app.route('/index')
@@ -20,15 +21,33 @@ def settings_page():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	error = None
-	if request.method == "POST": #TODO switch out for DB of users
-		if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-			error = 'Invalid Credentials. Please try again.'
-		else:
-			return redirect(url_for('home_page'))#TODO pass auth token
-	return render_template('login.html', error=error)
+	form = LoginForm()
+	if form.validate_on_submit():
+		flash('Login requested for OpenID="%s", remember_me=%s' %
+			(form.openid.data, str(form.remember_me.data)))
+		return redirect('/index')
+	return render_template('login.html', name='login',form=form, providers=app.config['OPENID_PROVIDERS'])
 
 @app.route('/logout')
 def logout():
 	logout_user()
 	return redirect(url_for('login'))
+
+@app.route('/test')
+def test():
+	user={'nickname':'Nabil'}
+	updates = [  # fake array of posts
+		{ 
+			'user': {'nickname': 'Nabil', 'initial':'N'}, 
+			'status': 'New report posted' 
+		},
+		{ 
+			'user': {'nickname': 'Gokul', 'initial':'G'}, 
+			'status': 'Data uploaded' 
+		},
+		{ 
+			'user': {'nickname': 'Nitin', 'initial':'N'}, 
+			'status': 'New analysis available' 
+		}
+	]
+	return render_template('index.html', user=user, updates=updates)

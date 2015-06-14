@@ -314,3 +314,9 @@ a:hover {
 .sendToBack {
 	z-index: -1;	
 }
+
+
+/******* Anylytics Helper Classes ********/
+.any-inline {
+	display:inline;
+}
