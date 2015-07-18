@@ -36,6 +36,17 @@ body {
 	height:50px;
 }
 
+.header-info {
+
+}
+
+#logout {
+	text-decoration: none;
+}
+#logout:hover {
+	text-decoration: none;
+}
+
 /*********[Global Nav Bar Styling]*********/
 
 .subnavbar {
