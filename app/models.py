@@ -2,9 +2,10 @@ from app import db
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	nickname = db.Column(db.String(64), index=True, unique=True)
+	username = db.Column(db.String(64), index=True, unique=True)
 	email = db.Column(db.String(120), index=True, unique=True)
 	action = db.relationship('Action',backref='user',lazy='dynamic')
+	password = db.Column(db.String)
 
 	def is_authenticated(self):
 		return True

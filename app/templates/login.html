@@ -24,17 +24,9 @@ function set_openid(openid, pr)
     {{ form.hidden_tag() }}
     <p>
         Please enter your OpenID:<br/>
-        {{ form.openid(size=80) }}<br/>
-        {% for error in form.openid.errors %}
-          <div class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            {{ error }}
-          </div>
-        {% endfor %}
-        |{% for pr in providers %}
-          <a href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');">{{ pr.name }}</a> |
-        {% endfor %}
+        {{ form.userid(size=80) }}<br/>
+        
+        {{ form.password(size=80) }}<br/>
     </p>
     <p>{{ form.remember_me }} Remember Me</p>
     <p><input type="submit" value="Sign In"></p>
