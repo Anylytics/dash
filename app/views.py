@@ -2,7 +2,8 @@ from flask import render_template, flash, abort, request, jsonify, redirect, url
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, bcrypt
 from .forms import LoginForm
-from .models import User
+from .models import User, Action
+from datetime import datetime
 
 
 
@@ -18,7 +19,8 @@ def login():
 		else:
 			if bcrypt.check_password_hash(user.password, form.password.data):
 				user.authenticated = True
-				db.session.add(user)
+				action = Action(action="Log In", timestamp=datetime.utcnow(), user=user)
+				db.session.add(action)
 				db.session.commit()
 				login_user(user, remember=True)
 				return redirect(url_for("home_page"))
