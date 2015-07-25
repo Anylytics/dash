@@ -7,6 +7,7 @@ class User(db.Model):
 	action = db.relationship('Action',backref='user',lazy='dynamic')
 	password = db.Column(db.String)
 
+
 	def is_authenticated(self):
 		return True
 
@@ -24,6 +25,19 @@ class User(db.Model):
 	
 	def __repr__(self):
 		return '<User %r>' % (self.nickname)
+
+
+class Template(db.Model):
+	id = db.Column(db.Integer,primary_key=True)
+	name = db.Column(db.String, index = True, unique = True)
+	filename = db.Column(db.String)
+	data = db.relationship('Data',backref = 'template',lazy = 'dynamic')
+
+class Data(db.Model):
+	id = db.Column(db.Integer,primary_key=True)
+	type = db.Column(db.String(120),index = True)
+	data = db.Column(db.String)
+	template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
 
 class Action(db.Model):
     id = db.Column(db.Integer, primary_key = True)

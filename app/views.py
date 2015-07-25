@@ -53,7 +53,12 @@ def home_page():
 @login_required
 def reports_page():
 	user=g.user
+	action = Action(action = "Checked reports", timestamp = datetime.utcnow(),user = user)
+	db.session.add(action)
+	db.session.commit()
 	return render_template('reports.html', name='reports', user=user)
+
+
 
 
 @app.route('/settings')
