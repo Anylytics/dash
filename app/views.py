@@ -4,6 +4,7 @@ from app import app, db, lm, bcrypt
 from .forms import LoginForm
 from .models import User, Action, Data, Template
 from datetime import datetime
+import json
 
 
 
@@ -83,6 +84,7 @@ def load_user(id):
 
 @app.route('/api/v1.0/getData', methods=['POST'])
 def get_data():
+	print request.json
 	if not request.json or not 'template' in request.json: 
 		abort(400)
 	numRows = request.json.get('rows', 1)
@@ -94,7 +96,7 @@ def get_data():
 	data = template.data.order_by(Data.id.desc()).limit(numRows).all()
 	response = []
 	for row in data:
-		response.append(row.data)
+		response.append(json.loads(row.data))
 	return jsonify(response = response)
 
 
