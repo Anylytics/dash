@@ -35,7 +35,6 @@ class Template(db.Model):
 
 class Data(db.Model):
 	id = db.Column(db.Integer,primary_key=True)
-	type = db.Column(db.String(120),index = True)
 	data = db.Column(db.String)
 	template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
 
