@@ -33,11 +33,11 @@ var name = '{{ name }}';
 
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        <ul>
+        <div class="alert alert-danger animated fadeIn">
         {% for message in messages %}
-            <li>{{ message }} </li>
+            <i class="glyphicon glyphicon-exclamation-sign"></i>  {{ message }}
         {% endfor %}
-        </ul>
+        </div>
       {% endif %}
     {% endwith %}
 			</div>
