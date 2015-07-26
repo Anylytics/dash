@@ -13,6 +13,7 @@ groupTemplate = db.Table('groupTemplate',db.Model.metadata,
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(64), index=True, unique=True)
+	name = db.Column(db.String(64))
 	email = db.Column(db.String(120), index=True, unique=True)
 	action = db.relationship('Action',backref='user',lazy='dynamic')
 	password = db.Column(db.String)
