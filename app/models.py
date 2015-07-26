@@ -15,12 +15,12 @@ class User(db.Model):
 	username = db.Column(db.String(64), index=True, unique=True)
 	name = db.Column(db.String(64))
 	email = db.Column(db.String(120), index=True, unique=True)
+	active = db.Column(db.Boolean)
 	action = db.relationship('Action',backref='user',lazy='dynamic')
 	password = db.Column(db.String)
 	Groups = db.relationship('Groups',
 							secondary = userGroup,
 							backref = 'user')
-
 
 	def is_authenticated(self):
 		return True
@@ -44,6 +44,7 @@ class User(db.Model):
 class Groups(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	groupName = db.Column(db.String(64), index=True, unique=True)
+	active = db.Column(db.Boolean)
 	users = db.relationship('User',
 							secondary = userGroup,
 							backref = 'groups')
@@ -61,6 +62,7 @@ class Template(db.Model):
 	id = db.Column(db.Integer,primary_key=True)
 	name = db.Column(db.String, index = True, unique = True)
 	filename = db.Column(db.String)
+	active = db.Column(db.Boolean)
 	data = db.relationship('Data',backref = 'template',lazy = 'dynamic')
 	Groups = db.relationship('Groups',
 							secondary = groupTemplate,
@@ -73,6 +75,7 @@ class Data(db.Model):
 	id = db.Column(db.Integer,primary_key=True)
 	data = db.Column(db.String)
 	template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
+	active = db.Column(db.Boolean)
 	def __repr__(self):
 		return '<Data %r>' % (self.data)
 

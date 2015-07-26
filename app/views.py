@@ -13,7 +13,7 @@ def login():
 		return redirect(url_for('home_page'))
 	form = LoginForm()
 	if form.validate_on_submit():
-		user = User.query.filter_by(username=form.userid.data).first()
+		user = User.query.filter_by(username=form.userid.data, active = True).first()
 		if user is None:
 			flash('Username or Password is invalid' , 'error')
 		else:
@@ -87,7 +87,7 @@ def get_data():
 		abort(400)
 	numRows = request.json.get('rows', 1)
 	#First get the associated template
-	template = Template.query.filter_by(name=request.json['template']).first()
+	template = Template.query.filter_by(name=request.json['template'], active = True).first()
 	if template is None:
 		abort(404)
 	#From the template get the data requested
@@ -102,7 +102,7 @@ def get_data():
 def upload_data():
     if not request.json or not 'template' in request.json or not 'data' in request.json:
         abort(400)
-    template = Template.query.filter_by(name=request.json['template']).first()
+    template = Template.query.filter_by(name=request.json['template'], active = True).first()
     if template is None:
     	abort(404)
     data = Data(data = request.json['data'], template= template)
