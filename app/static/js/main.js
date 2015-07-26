@@ -12,4 +12,4 @@ require.config({
 });
 
 
-require(["global-navbar","status-widget"]);
+require(["global-navbar","table-history-three"]);

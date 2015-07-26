@@ -6,78 +6,7 @@
 
 <!--Define 1 column layout here-->
 <div class="container">
-	<div class="row">
-		<div class="col-sm-6">
-			<div class="dash-widget">
-				<div class="dash-widget-header">
-					<h4><i class="glyphicon glyphicon-tasks"></i>Daily Billing Report Last 30 Days</h4>
-				</div>
-				<table class="table">
-					<tr>
-						<th colspan="7" style="text-align:right;">Avg Bills per Day (last 30 days)</th>
-					</tr>
-					<tr>
-						<th>		</th>
-						<th>		</th>
-						<th>0-15	</th>
-						<th>16-30	</th>
-						<th>31-50	</th>
-						<th>51-100	</th>
-						<th>101+	</th>
-					</tr>
-					<tr>
-				{% for billingReport in billingReports %}
-						<td>				{{billingReport.city.id}}		</td>
-						<td>				{{billingReport.city.name}}		</td>
-						<td><a href="#">	{{billingReport.buckets.a}}		</a></td>
-						<td><a href="#">	{{billingReport.buckets.b}}		</a></td>
-						<td><a href="#">	{{billingReport.buckets.c}}		</a></td>
-						<td><a href="#">	{{billingReport.buckets.d}}		</a></td>
-						<td><a href="#">	{{billingReport.buckets.e}}		</a></td>
-					</tr>
-				{% endfor %}
-				</table>
-			</div>
-		</div>
-		<div class="col-sm-6">
-			<div class="dash-widget">
-				<div class="dash-widget-header">
-					<h4><i class="glyphicon glyphicon-tasks"></i>Health Summary</h4>
-				</div>
-				<div class="dash-widget-content">
-					<table class="table">
-					{% for store in cityStoreHealth %}
-						<tr>
-							<td>{{store.store.city}} : {{store.store.name}}_{{store.store.id}}</td>
-						{% for storeDay in store.buckets %}
-							<td>{{store.buckets[storeDay]}}</td>
-						{% endfor %}
-						</tr>
-					{% endfor %}
-						<tr class="rotate-ninty">
-							<td></td>
-							<td>03-05-1990</td>
-							<td>03-05-1990</td>
-							<td>03-05-1990</td>
-							<td>03-05-1990</td>
-							<td>03-05-1990</td>
-							<td>03-05-1990</td>
-							<td>03-05-1990</td>
-							<td>03-05-1990</td>
-							<td>03-05-1990</td>
-							<td>03-05-1990</td>
-						</tr>
-					</table>
-				</div>
-			</div>
-			<div class="dash-widget">
-				<div class="dash-widget-header">
-					<h4><i class="glyphicon glyphicon-tasks"></i>Health Summary</h4>
-				</div>
-				<img class="report-img" src="./static/img/07162014_ALL.png"/>
-			</div>
-		</div>
-	</div>
+	<div id="tableHistoryThree"></div>
 </div>
 </div>
 {% endblock %}

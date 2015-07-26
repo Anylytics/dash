@@ -183,12 +183,18 @@ body {
 	display: none;
 }
 
+/*********[Helper Classes]*********/
+
+.pad-right {
+	margin-right:10px;	
+}
 
 /*********[Global Dash Widgets]*********/
 .dash-widget {
 	border: 1px solid #d6d6d6;
 	padding:10px;
 	margin:10px;
+	text-align:left;
 }
 
 .dash-widget:hover {
@@ -249,7 +255,7 @@ table {
 	text-align:left;
 }
 
-tr:hover {
+tbody > tr:hover {
 	transition: background-color 0.4s ease;
 	background-color:#dceeda;
 }
