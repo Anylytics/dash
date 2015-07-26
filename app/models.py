@@ -24,7 +24,18 @@ class User(db.Model):
 			return str(self.id)
 	
 	def __repr__(self):
-		return '<User %r>' % (self.nickname)
+		return '<User %r>' % (self.username)
+
+
+class Groups(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	groupName = db.Column(db.String(64), index=True, unique=True)
+
+
+userGroup = db.Table('userGroup',
+	db.Column('user_id',db.Integer,db.ForeignKey('user.id')),
+	db.Column('group_id',db.Integer,db.ForeignKey('group.id')))
+
 
 
 class Template(db.Model):
@@ -32,11 +43,16 @@ class Template(db.Model):
 	name = db.Column(db.String, index = True, unique = True)
 	filename = db.Column(db.String)
 	data = db.relationship('Data',backref = 'template',lazy = 'dynamic')
+	def __repr__(self):
+		return '<Template %r>' % (self.name)
+
 
 class Data(db.Model):
 	id = db.Column(db.Integer,primary_key=True)
 	data = db.Column(db.String)
 	template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
+	def __repr__(self):
+		return '<Data %r>' % (self.type)
 
 class Action(db.Model):
     id = db.Column(db.Integer, primary_key = True)
