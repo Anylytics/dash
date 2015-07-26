@@ -189,6 +189,10 @@ body {
 	margin-right:10px;	
 }
 
+.clickable {
+	cursor:pointer;
+}
+
 /*********[Global Dash Widgets]*********/
 .dash-widget {
 	border: 1px solid #d6d6d6;
@@ -257,7 +261,7 @@ table {
 
 tbody > tr:hover {
 	transition: background-color 0.4s ease;
-	background-color:#dceeda;
+	background-color:#dceeda!important;
 }
 
 tr {
