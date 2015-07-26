@@ -2,7 +2,7 @@ from flask import render_template, flash, abort, request, jsonify, redirect, url
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, bcrypt
 from .forms import LoginForm
-from .models import User, Action
+from .models import User, Action, Data, Template
 from datetime import datetime
 
 
@@ -80,24 +80,32 @@ def before_request():
 def load_user(id):
 	return User.query.get(int(id))
 
-"""
-@oid.after_login
-def after_login(resp):
-	if resp.email is None or resp.email == "":
-		flash('Invalid login. Please try again.')
-		return redirect(url_for('login'))
-	user = User.query.filter_by(email=resp.email).first()
-	if user is None:
-		nickname = resp.nickname
-		if nickname is None or nickname =="":
-			nickname = resp.email.split('@')[0]
-		user = User(nickname=nickname, email=resp.email)
-		db.session.add(user)
-		db.session.commit()
-	remember_me = False
-	if 'remember_me' in session:
-		remember_me = session['remember_me']
-		session.pop('remember_me', None)
-	login_user(user, remember = remember_me)
-	return redirect(request.args.get('next') or url_for('home_page'))  #will return user to originally requested page, otherwise, home
-	"""
+
+@app.route('/api/v1.0/getData', methods=['POST'])
+def get_data():
+	if not request.json or not 'template' in request.json: 
+		abort(400)
+	numRows = request.json.get('rows', 1)
+	#First get the associated template
+	template = Template.query.filter_by(name=request.json['template']).first()
+	if template is None:
+		abort(404)
+	#From the template get the data requested
+	data = template.data.order_by(Data.id.desc()).limit(numRows).all()
+	response = []
+	for row in data:
+		response.append(row.data)
+	return jsonify(response = response)
+
+
+@app.route('/api/v1.0/uploadData', methods=['POST'])
+def upload_data():
+    if not request.json or not 'template' in request.json or not 'data' in request.json:
+        abort(400)
+    template = Template.query.filter_by(name=request.json['template']).first()
+    if template is None:
+    	abort(404)
+    data = Data(data = request.json['data'], template= template)
+    db.session.add(data)
+    db.session.commit()
+    return jsonify({'Data': request.json['data']}), 201

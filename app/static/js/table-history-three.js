@@ -4,70 +4,55 @@ define([ 'ractive', 'rv!../ractive/table-history-three'], function ( Ractive, ht
     var tableHistoryThree = new Ractive({
       el: 'tableHistoryThree',
       data: {
+      	response: [
+      		{
+	      		"date": "7/25/2015",
+	      		"aggregate": [2, 5, 0, 33],
+	      		"summary": {
+		      			"New Stores": [69, 3, 24, 12, 3],
+		      			"Bangalore":  [19, 2, 4, 4, 1],
+						"Chennai": 	[50, 15, 3, 1, 2],
+						"Delhi": 	[54, 20, 2, 4, 4],
+						"Hyderabad": [32, 13, 3, 41, 5],
+						"Mumbai": 	[92, 12, 8, 33, 3],
+						"Pune": 		[92, 16, 9, 49, 0],
+						"Telangana": [5, 2, 0, 38, 1]
+	      			}
+      		}
+      	],
       	aggregate: 
 	      	{
-	      		columns: 
-			      	[
-			      		{
-			      			label:""
-			      		},
-			      		{
-			      			label:"07/25/2015",
-			      		},
-			      		{
-			      			label:"07/10/2015",
-			      		},
-			      		{
-			      			label:"06/26/2015",
-			      		}
-			      	],
-			   	rows: 
-			   		[
-			   			{label:"Dead", 			data: 	[2, 3, 8]		},
-			   			{label:"Dying in ICU",	data: 	[5, 2, 12]		},
-			   			{label:"OK",			data: 	[0, 15, 20]		},
-			   			{label:"Healthy",		data: 	[33, 12, 13]	},
-			   		]
+	      		title: "Historical Summary",
+	      		subheading: "Aggregate Store Performance",
+	      		rows: ["Dead", "Dying in ICU", "OK", "Healthy"],
+	      		columns: {
+	      			"07/25/2015": [2, 5, 0, 33],
+	      			"07/10/2015": [1, 3, 5, 9]
+	      		}
 			},
 		current: 
 			{
-				currentDate: "07/25/2015",
+				title: "Detailed Summary",
+				subheading: "Data for 07/25/2015",
 				columns:
-					[
-						{
-							label:"City"
-						},
-						{
-							label:"No Stores"
-						},
-						{
-							label:"Dead"
-						},
-						{
-							label:"Dying in ICU"
-						},
-						{
-							label:"OK"
-						},
-						{
-							label:"Healthy"
-						},
-					],
+					[ "City", "No Stores", "Dead", "Dying in ICU", "OK", "Healthy" ],
 				rows:
-					[
-							{label: "New Stores",	data: [69, 3, 24, 12, 3]	},
-							{label: "Bangalore",	data: [19, 2, 4, 4, 1]	},
-							{label: "Chennai",		data: [50, 15, 3, 1, 2]	},
-							{label: "Delhi",		data: [54, 20, 2, 4, 4]	},
-							{label: "Hyderabad",	data: [32, 13, 3, 41, 5]	},
-							{label: "Mumbai",		data: [92, 12, 8, 33, 3]	},
-							{label: "Pune",			data: [92, 16, 9, 49, 0]	},
-							{label: "Telangana",	data: [5, 2, 0, 38, 1]	},
-					]
+					{
+		      			"New Stores": [69, 3, 24, 12, 3],
+		      			"Bangalore":  [19, 2, 4, 4, 1],
+						"Chennai": 	[50, 15, 3, 1, 2],
+						"Delhi": 	[54, 20, 2, 4, 4],
+						"Hyderabad": [32, 13, 3, 41, 5],
+						"Mumbai": 	[92, 12, 8, 33, 3],
+						"Pune": 		[92, 16, 9, 49, 0],
+						"Telangana": [5, 2, 0, 38, 1]
+	      			}
 			}
       },
     template: html
     });
+
+	tableHistoryThree.set("current.rows", tableHistoryThree.get("response[0].summary"))
 
     return tableHistoryThree;
 

@@ -2,24 +2,25 @@
 	<div class="col-sm-6">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-tasks"></i>Historical Summary</h4>
+				<h4><i class="glyphicon glyphicon-tasks"></i>{{aggregate.title}}</h4>
 			</div>
 			<div class="dash-widget-content">
 				<table class="table">
-				<caption>Aggregate Store Performance</caption>
+				<caption>{{aggregate.subheading}}</caption>
 					<thead>
 						<tr>
-							{{#each aggregate.columns}}
-								<th>{{label}}</th>
+							<th> </th>
+							{{#each aggregate.columns:date}}
+								<th>{{date}}</th>
 							{{/each}}
 						</tr>
 					</thead>
 					<tbody>
-						{{#each aggregate.rows}}
+						{{#each aggregate.rows:index}}
 							<tr>
-								<th scope="row">{{label}}</th>
-								{{#each data}}
-									<td>{{this}}</td>
+								<th scope="row">{{this}}</th>
+								{{#each aggregate.columns}}
+									<td>{{this[index]}}</td>
 								{{/each}}
 							</tr>
 						{{/each}}
@@ -45,23 +46,23 @@
 	<div class="col-sm-12">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-tasks"></i>Detailed Summary</h4>
+				<h4><i class="glyphicon glyphicon-tasks"></i>{{current.title}}</h4>
 			</div>
 			<div class="dash-widget-content">
 				<table class="table">
-				<caption>Data for {{current.currentDate}} </caption>
+				<caption>{{current.subheading}}</caption>
 					<thead>
 						<tr>
 							{{#each current.columns}}
-								<th>{{label}}</th>
+								<th>{{this}}</th>
 							{{/each}}
 						</tr>
 					</thead>
 					<tbody>
-						{{#each current.rows}}
+						{{#each current.rows:name}}
 							<tr>
-								<th scope="row">{{label}}</th>
-								{{#each data}}
+								<th scope="row">{{name}}</th>
+								{{#each this}}
 									<td>{{this}}</td>
 								{{/each}}
 							</tr>

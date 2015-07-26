@@ -52,7 +52,7 @@ class Data(db.Model):
 	data = db.Column(db.String)
 	template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
 	def __repr__(self):
-		return '<Data %r>' % (self.type)
+		return '<Data %r>' % (self.data)
 
 class Action(db.Model):
     id = db.Column(db.Integer, primary_key = True)
