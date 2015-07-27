@@ -20,7 +20,7 @@ def g_login_required(group="ANY"):
         def decorated_view(*args, **kwargs):
             if not current_user.is_authenticated():
                return lm.unauthorized()
-            group_object = Groups.query.filter_by(groupName=group).first()
+            group_object = Groups.query.filter_by(groupName=group, active = True).first()
             if ( (group_object not in current_user.groups) and (group != "ANY")):
                 return lm.unauthorized()      
             return fn(*args, **kwargs)
@@ -102,7 +102,7 @@ def admin_upload_page():
 		else:
 			#Find the template the user has selected
 			template_id = form.templateid.data
-			template = Template.query.filter_by(id=template_id).first()
+			template = Template.query.filter_by(id=template_id, active=True).first()
 			if template is None:
 				flash('Could not find template' , 'success')
 			else:
@@ -149,7 +149,7 @@ def get_data():
 	if template is None:
 		abort(404)
 	#From the template get the data requested
-	data = template.data.order_by(Data.id.desc()).limit(numRows).all()
+	data = template.data.filter_by(active=True).order_by(Data.id.desc()).limit(numRows).all()
 	response = []
 	for row in data:
 		response.append(json.loads(row.data))
