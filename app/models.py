@@ -16,9 +16,9 @@ class User(db.Model):
 	email = db.Column(db.String(120), index=True, unique=True)
 	action = db.relationship('Action',backref='user',lazy='dynamic')
 	password = db.Column(db.String)
-	Groups = db.relationship('Groups',
-							secondary = userGroup,
-							backref = 'user')
+	#Groups = db.relationship('Groups',
+	#						secondary = userGroup,
+	#							backref = 'user')
 
 
 	def is_authenticated(self):
@@ -35,6 +35,9 @@ class User(db.Model):
 			return unicode(self.id)
 		except NameError:
 			return str(self.id)
+
+	def get_groups(self):
+            return self.groups
 	
 	def __repr__(self):
 		return '<User %r>' % (self.username)

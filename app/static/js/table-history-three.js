@@ -56,6 +56,18 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'jquery'], function ( R
 	  }
 	});
 
+	tableHistoryThree.on( 'changeFocus', function( event, object )  {
+		
+		var response = tableHistoryThree.get("response");
+		for (var i =0; i<response.length; i++)
+		{
+			if (response[i]["date"] == object)
+			{
+				tableHistoryThree.set("current.rows", response[i]["summary"]);
+			}
+		}
+	});
+
     return tableHistoryThree;
 
 });

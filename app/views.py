@@ -1,11 +1,31 @@
 from flask import render_template, flash, abort, request, jsonify, redirect, url_for, session, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, bcrypt
-from .forms import LoginForm
-from .models import User, Action, Data, Template
+from .forms import LoginForm, UploadForm
+from .models import User, Action, Data, Template, Groups
 from datetime import datetime
 import json
+from functools import wraps
 
+def is_json(myjson):
+  try:
+    json_object = json.loads(myjson)
+  except ValueError, e:
+    return False
+  return True
+
+def g_login_required(group="ANY"):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated_view(*args, **kwargs):
+            if not current_user.is_authenticated():
+               return lm.unauthorized()
+            group_object = Groups.query.filter_by(groupName=group).first()
+            if ( (group_object not in current_user.groups) and (group != "ANY")):
+                return lm.unauthorized()      
+            return fn(*args, **kwargs)
+        return decorated_view
+    return wrapper
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -59,6 +79,43 @@ def reports_page():
 	db.session.commit()
 	return render_template('reports.html', name='reports', user=user)
 
+@app.route('/admin-upload', methods=['GET', 'POST'])
+@g_login_required(group="Admin")
+def admin_upload_page():
+	user=g.user
+	form = UploadForm()
+	templates = set()
+
+	for group in user.groups:
+		#Get all the templates in this group
+		for template in group.Templates:
+			templates.add(template)
+	form.templateid.choices = [[t.id, t.name] for t in templates]
+
+	if form.validate_on_submit():
+		
+		action = Action(action = "Uploaded Data via Admin Panel", timestamp = datetime.utcnow(), user = user)
+		db.session.add(action)
+		#Validate that the data is json
+		if is_json(form.data.data) == False:
+			flash("Invalid JSON submitted")
+		else:
+			#Find the template the user has selected
+			template_id = form.templateid.data
+			template = Template.query.filter_by(id=template_id).first()
+			if template is None:
+				flash('Could not find template' , 'success')
+			else:
+				data = Data(data = form.data.data, template= template)
+				db.session.add(data)
+				flash('Successfully Uploaded Data to '+template.name)
+				
+		db.session.commit()
+	else:
+		action = Action(action = "Accessed Admin Upload Panel", timestamp = datetime.utcnow(), user = user)
+		db.session.add(action)
+		db.session.commit()
+	return render_template('admin-upload.html', name='admin', user=user, templates=list(templates), form=form)
 
 
 
@@ -80,7 +137,6 @@ def before_request():
 @lm.user_loader
 def load_user(id):
 	return User.query.get(int(id))
-
 
 @app.route('/api/v1.0/getData', methods=['POST'])
 def get_data():

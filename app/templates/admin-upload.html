@@ -1,0 +1,31 @@
+{% extends "template.html" %}
+{% block title %}Administration{% endblock %}
+
+{% block main_content %}
+<!--Define 2 column layout here-->
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="dash-widget">
+				<div class="dash-widget-header">
+					<h4><i class="glyphicon glyphicon-cloud-upload"></i>Upload Data</h4>
+				</div>
+				<div class="dash-widget-content">
+					<form action="" method="post" name="Upload Data">
+						{{ form.hidden_tag() }}
+						<span>Select a template:</span>
+						{{ form.templateid() }}
+						<br>
+						<span>Insert valid JSON:</span>
+						<br>
+						{{ form.data(cols="100", rows="25")}}	
+						<p><input type="submit" value="Submit"></p>
+					</form>					
+				</div>
+			</div>
+			
+		<!--<div id="status-widget-home"></div>-->
+		</div>
+	</div>
+</div>
+{% endblock %}

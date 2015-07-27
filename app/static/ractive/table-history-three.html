@@ -11,7 +11,7 @@
 						<tr>
 							<th> </th>
 							{{#each aggregate.columns:date}}
-								<th>{{date}}</th>
+								<th on-click='changeFocus:{{date}}'><a href="#">{{date}}</a></th>
 							{{/each}}
 						</tr>
 					</thead>
