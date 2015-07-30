@@ -5,14 +5,14 @@
 				<h4><i class="glyphicon glyphicon-tasks"></i>{{aggregate.title}}</h4>
 			</div>
 			<div class="dash-widget-content">
-				{{>loadingWidget}}
+				<div><img src="./static/img/amap.png"/></div>
 				<table class="table">
 				<caption>{{aggregate.subheading}}</caption>
 					<thead>
 						<tr>
 							<th> </th>
 							{{#each aggregate.columns:date}}
-								<th on-click='changeFocus:{{date}}'><a href="#">{{date}}</a></th>
+								<th>{{date}}</th>
 							{{/each}}
 						</tr>
 					</thead>
@@ -33,34 +33,13 @@
 	<div class="col-sm-6">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-tasks"></i>Download Report</h4>
-			</div>
-			<div class="dash-widget-content">
-				<button type="button" class="btn btn-default" aria-label="Left Align">
-					<i  class="glyphicon glyphicon-download pad-right" aria-hidden="true"></i><span>Download</span>
-				</button>
-			</div><!--End Content-->
-		</div>
-	</div><!--End col-sm-6-->
-</div>
-<div class="row">
-	<div class="col-sm-12">
-		<div class="dash-widget">
-			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-tasks"></i>{{current.title}}</h4>
+				<h4><i class="glyphicon glyphicon-tasks"></i>{{detailed.title}}</h4>
 			</div>
 			<div class="dash-widget-content">
 				<table class="table">
-				<caption>{{current.subheading}}</caption>
-					<thead>
-						<tr>
-							{{#each current.columns}}
-								<th>{{this}}</th>
-							{{/each}}
-						</tr>
-					</thead>
+				<caption>{{detailed.subheading}}</caption>
 					<tbody>
-						{{#each current.rows:name}}
+						{{#each detailed.rows:name}}
 							<tr>
 								<th scope="row">{{name}}</th>
 								{{#each this}}
@@ -69,9 +48,15 @@
 							</tr>
 						{{/each}}
 					</tbody>
+					<tfoot>
+						<tr>
+							{{#each detailed.columns}}
+								<th class="rotate-ninty"><div><span>{{this}}</span></div></th>
+							{{/each}}
+						</tr>
+					</tfoot>
 				</table>
 			</div><!--End Content-->
 		</div>
 	</div><!--End col-sm-6-->
-	</div>
 </div>

@@ -269,5 +269,13 @@ tr {
 }
 
 tr.rotate-ninty td {
-	
+  height: 140px;
+  white-space: nowrap;
+}
+
+th.rotate-ninty > div {
+  transform: 
+    translate(-45px, 25px)
+    rotate(-45deg);
+  width: 30px;
 }

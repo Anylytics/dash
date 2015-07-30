@@ -38,7 +38,7 @@ def login():
 		if user is None:
 			flash('Username or Password is invalid' , 'error')
 		else:
-			if bcrypt.check_password_hash(user.password, form.password.data):
+			if bcrypt.check_password_hash(user.password.encode('utf-8'), form.password.data):
 				user.authenticated = True
 				action = Action(action="Log In", timestamp=datetime.utcnow(), user=user)
 				db.session.add(action)

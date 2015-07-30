@@ -1,5 +1,7 @@
 // Now we've configured RequireJS, we can load our dependencies and start
-define([ 'ractive', 'rv!../ractive/table-history-three', 'jquery'], function ( Ractive, html, jq) {
+define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-widget',  'jquery'], function ( Ractive, html, load, $) {
+
+	Ractive.partials.loadingWidget = load;
 
     var tableHistoryThree = new Ractive({
       el: 'tableHistoryThree',
@@ -53,6 +55,7 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'jquery'], function ( R
 	  	{
 	  		tableHistoryThree.set("aggregate.columns."+json["response"][i]["date"], json["response"][i]["aggregate"]);
 	  	}
+	  	hideAnimation("loading-screen");
 	  }
 	});
 
@@ -67,6 +70,14 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'jquery'], function ( R
 			}
 		}
 	});
+
+	function hideAnimation(initialID){ 
+
+		$("#load-one").fadeOut("slow");
+		$("#full-any-logo").delay( 100 ).fadeIn("fast");
+		$("#full-any-logo").delay( 100 ).addClass("animated flipInX");
+		$("#loading-screen").delay( 1400 ).slideUp( 500 );
+	}
 
     return tableHistoryThree;
 

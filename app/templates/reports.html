@@ -4,13 +4,17 @@
 {% block main_content %}
 <div style="text-align:center; ">
 
-<!--Define 1 column layout here-->
-<div class="container">
-	<div id="tableHistoryThree"></div>
-</div>
+	<!--Define 1 column layout here-->
+	<div class="container">
+		<div id="tableHistoryThree"></div>
+	</div>
+	<div class="container">
+		<div id="tableHealthMap"></div>
+	</div>
+
 </div>
 
 <script>
-	require(["table-history-three"]);
+	require(["table-history-three", "table-health-map"]);
 </script>
 {% endblock %}
