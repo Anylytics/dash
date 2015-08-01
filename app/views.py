@@ -93,7 +93,7 @@ def admin_upload_page():
 	form.templateid.choices = [[t.id, t.name] for t in templates]
 
 	if form.validate_on_submit():
-		
+			
 		action = Action(action = "Uploaded Data via Admin Panel", timestamp = datetime.utcnow(), user = user)
 		db.session.add(action)
 		#Validate that the data is json

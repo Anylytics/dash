@@ -10,6 +10,8 @@ groupTemplate = db.Table('groupTemplate',db.Model.metadata,
 	db.Column('group_id',db.Integer,db.ForeignKey('groups.id')),
 	db.Column('template_id',db.Integer,db.ForeignKey('template.id')))
 
+
+
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(64), index=True, unique=True)
@@ -51,6 +53,9 @@ class Groups(db.Model):
 	Templates = db.relationship('Template',
 								secondary = groupTemplate,
 								backref = 'groups')
+	parent_id = db.Column(db.Integer,db.ForeignKey('groups.id'))
+	parent = db.relationship('Groups',lazy = True, backref = 'children', remote_side = [id])
+
 
 	def __repr__(self):
 		return '<Group %r>' % (self.groupName)
