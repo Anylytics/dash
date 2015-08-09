@@ -16,6 +16,10 @@ Date: 		6/8/2015;
   border-radius: 0!important;
 }
 
+.container {
+	position:relative;
+}
+
 /*********[Global Header Styling]*********/
 body {
 }
@@ -189,6 +193,10 @@ body {
 	margin-right:10px;	
 }
 
+.glyphicon.push {
+	margin-right:5px;
+}
+
 .clickable {
 	cursor:pointer;
 }
@@ -228,6 +236,14 @@ body {
 .dash-widget-line-item:hover {
 	transition: background-color 0.4s ease;
 	background-color:#dceeda;
+}
+
+.hover-green:hover {
+	background-color:#dceeda!important;
+}
+
+.hover-red:hover {
+	background-color:#EEDADA!important;
 }
 
 .line-item-icon {
@@ -278,4 +294,35 @@ th.rotate-ninty > div {
     translate(-45px, 25px)
     rotate(-45deg);
   width: 30px;
+}
+
+.sortable {
+	cursor:pointer;
+}
+
+.sortable > i {
+	transition: all 0.3s;
+	opacity:0.4;
+	padding: 4px;
+}
+
+.sortable:hover > i {
+	background-color:#54A148;
+	color:white;
+	opacity:0.6;
+	border-radius:30%;
+	transition: all 0.3s;
+}
+
+.sortable.sorted > i {
+	background-color:#54A148;
+	color:white;
+	opacity:0.9;
+	transform: rotate(90deg);
+	border-radius:50%;
+
+}
+
+.sortable.sorted {
+	text-decoration: underline;
 }

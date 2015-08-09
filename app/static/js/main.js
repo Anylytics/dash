@@ -7,7 +7,8 @@ require.config({
         mapbox: 'lib/mapbox',
         jquery: 'lib/jquery-1.11',
         jqueryui: 'lib/jquery_ui',
-        bootstrap: 'bootstrap/bootstrap.min'
+        bootstrap: 'bootstrap/bootstrap.min',
+        Chart: 'lib/Chart.min'
     }
 });
 

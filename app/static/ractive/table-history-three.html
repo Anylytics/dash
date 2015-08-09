@@ -1,32 +1,21 @@
+{{>loadingWidget}}
 <div class="row">
-	<div class="col-sm-6">
+	<div class="col-sm-12">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-tasks"></i>{{aggregate.title}}</h4>
+				<h4><i class="glyphicon glyphicon-tasks"></i>Choose Report</h4>
 			</div>
 			<div class="dash-widget-content">
-				{{>loadingWidget}}
-				<table class="table">
-				<caption>{{aggregate.subheading}}</caption>
-					<thead>
-						<tr>
-							<th> </th>
-							{{#each aggregate.columns:date}}
-								<th on-click='changeFocus:{{date}}'><a href="#">{{date}}</a></th>
-							{{/each}}
-						</tr>
-					</thead>
-					<tbody>
-						{{#each aggregate.rows:index}}
-							<tr>
-								<th scope="row">{{this}}</th>
-								{{#each aggregate.columns}}
-									<td>{{this[index]}}</td>
-								{{/each}}
-							</tr>
-						{{/each}}
-					</tbody>
-				</table>
+				<div class="form-group">
+				  <label for="sel1">Select list:</label>
+				  <select class="form-control" id="sel1">
+				    <option></option>
+				    <option>1</option>
+				    <option>2</option>
+				    <option>3</option>
+				    <option>4</option>
+				  </select>
+				</div>
 			</div><!--End Content-->
 		</div>
 	</div><!--End col-sm-6-->
@@ -36,9 +25,74 @@
 				<h4><i class="glyphicon glyphicon-tasks"></i>Download Report</h4>
 			</div>
 			<div class="dash-widget-content">
-				<button type="button" class="btn btn-default" aria-label="Left Align">
+				<button type="button" class="btn btn-default">
 					<i  class="glyphicon glyphicon-download pad-right" aria-hidden="true"></i><span>Download</span>
 				</button>
+			</div><!--End Content-->
+		</div>
+	</div><!--End col-sm-6-->
+	<div class="col-sm-6">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4><i class="glyphicon glyphicon-tasks"></i>{{response[0].title}}</h4>
+			</div>
+			<div class="dash-widget-content">
+				{{#each response[0].rows}}
+					<div class="dash-widget-line-item">
+						<div class="line-item-icon any-inline">
+							{{#if this.direction=="increased"}}
+								<i class="glyphicon glyphicon-arrow-up"></i>
+							{{else}}
+								<i class="glyphicon glyphicon-arrow-down"></i>
+							{{/if}}
+							{{this.percentage}}%
+						</div>
+						<div class="line-item-content any-inline">
+							Number of {{this.state}} stores {{this.direction}} by {{this.percentage}}%
+						</div>
+					</div>
+				{{/each}}
+			</div><!--End Content-->
+		</div>
+	</div><!--End col-sm-6-->
+	<div class="col-sm-6">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4><i class="glyphicon glyphicon-tasks"></i>{{response[3].title}}</h4>
+			</div>
+			<div class="dash-widget-content">
+				<table class="table">
+				<caption>{{response[3].subheading}}</caption>
+					<thead>
+						<tr>
+							{{#each response[3].headers}}
+								<th class="sortable {{ sortColumn === this.name  ? "sorted" : "" }}" on-click='sort:{{this.name}}'><i class="glyphicon glyphicon-play-circle push"></i>{{this.label}}</th>
+							{{/each}}
+						</tr>
+					</thead>
+					<tbody>
+						{{#each sort(response[3].rows, sortColumn):num}}
+							<tr>
+								<!--<th scope="row">{{this}}</th>-->
+								{{#each this}}
+									<td>{{this}}</td>
+								{{/each}}
+							</tr>
+						{{/each}}
+					</tbody>
+				</table>
+				<canvas id="myChart" style="width:100%;"></canvas>
+			</div><!--End Content-->
+		</div>
+	</div><!--End col-sm-6-->	
+	<div class="col-sm-12">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4><i class="glyphicon glyphicon-tasks"></i>{{response[2].title}}</h4>
+			</div>
+			<div class="dash-widget-content">
+				{{response[2].subheading}}
+				<canvas id="numberStoresBreakdown" style="width:100%;"></canvas>
 			</div><!--End Content-->
 		</div>
 	</div><!--End col-sm-6-->
@@ -47,22 +101,22 @@
 	<div class="col-sm-12">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-tasks"></i>{{current.title}}</h4>
+				<h4><i class="glyphicon glyphicon-tasks"></i>{{response[4].title}}</h4>
 			</div>
 			<div class="dash-widget-content">
 				<table class="table">
-				<caption>{{current.subheading}}</caption>
+				<caption>{{response[4].subheading}}</caption>
 					<thead>
 						<tr>
-							{{#each current.columns}}
-								<th>{{this}}</th>
+							{{#each response[4].headers}}
+								<th class="sortable {{ sortColumnTwo === this.name  ? "sorted" : "" }}" on-click='sort2:{{this.name}}'><i class="glyphicon glyphicon-play-circle push"></i>{{this.label}}</th>
 							{{/each}}
 						</tr>
 					</thead>
 					<tbody>
-						{{#each current.rows:name}}
+						{{#each sort(response[4].rows, sortColumnTwo):num}}
 							<tr>
-								<th scope="row">{{name}}</th>
+								<!--<th scope="row">{{this}}</th>-->
 								{{#each this}}
 									<td>{{this}}</td>
 								{{/each}}

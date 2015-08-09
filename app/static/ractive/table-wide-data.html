@@ -1,0 +1,31 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4><i class="glyphicon glyphicon-tasks"></i>{{data1.title}}</h4>
+			</div>
+			<div class="dash-widget-content">
+				<table class="table">
+				<caption>{{data1.subtitle}}</caption>
+					<thead>
+						<tr>
+							<th> </th>
+							{{#each data1.headers}}
+								<th class="rotate-ninty"><div><span>{{this}}</span></div></th>
+							{{/each}}
+						</tr>
+					</thead>
+					<tbody>
+						{{#each data1.rows}}
+							<tr>
+								{{#each this}}
+								<td>{{this}}</td>
+								{{/each}}
+							</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div><!--End Content-->
+		</div>
+	</div><!--End col-sm-6-->
+</div>
