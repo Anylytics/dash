@@ -1,7 +1,10 @@
 // Now we've configured RequireJS, we can load our dependencies and start
-define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-widget',  'jquery', 'Chart'], function ( Ractive, html, load, $, Chart) {
+define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-widget',  'jquery', 'Chart', 'dashcharts', 'dashglobals'], function ( Ractive, html, load, $, Chart, dashcharts, dashglobals) {
 
+	/*INITIALIZATIONS*/
 	Ractive.partials.loadingWidget = load;
+	var dashLineCharts = new dashCharts('line');
+
 
     var tableHistoryThree = new Ractive({
       el: 'tableHistoryThree',
@@ -147,77 +150,6 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-
     	sortColumnTwo: 'city',
     template: html
     });
-	
-	function buildChart(dataObj, chartID) {
-		var ctx = $(chartID).get(0).getContext("2d");
-		var labelArray = [];
-		var groupArray = [];
-		var dataArray = [];
-		var dataObjArray = dataObj.rows;
-
-		for (dataObj in dataObjArray) {
-			var foundMatch = false;
-			for (group in groupArray) {
-				if (groupArray[group]==dataObjArray[dataObj].group) {
-					foundMatch = true;
-				}
-			}
-			if (!foundMatch) {
-				groupArray.push(dataObjArray[dataObj].group)
-			}
-		}
-
-		for (dataObj in dataObjArray) {
-			labelArray.push(dataObjArray[dataObj].label);
-			dataArray.push(dataObjArray[dataObj].value);
-		}
-
-		var dataSetArray = [];
-		for (groupVal in groupArray) {
-			var tmpObj = {};
-			tmpObj.data = [];
-			tmpObj.label = groupArray[groupVal];
-			tmpObj.fillColor = "rgba(151,187,205,0.2)";
-			tmpObj.strokeColor = "rgba(151,187,205,1)";
-			tmpObj.pointColor = "rgba(151,187,205,1)";
-			tmpObj.pointStrokeColor = "#fff";
-			tmpObj.pointHighlightFill = "#fff";
-			tmpObj.pointHighlightStroke = "rgba(151,187,205,1)";
-			for (dataObj in dataObjArray) {
-				if (groupArray[groupVal]==dataObjArray[dataObj].group) {
-					tmpObj.data.push(dataObjArray[dataObj].value);
-				}
-			}
-			dataSetArray.push(tmpObj);
-		}
-
-		var dataChart = {
-	    	labels: labelArray,
-	    	datasets: dataSetArray/*[
-			        {
-			            label: tableHistoryThree.get(dataObj+".title"),
-			            fillColor: "rgba(151,187,205,0.2)",
-			            strokeColor: "rgba(151,187,205,1)",
-			            pointColor: "rgba(151,187,205,1)",
-			            pointStrokeColor: "#fff",
-			            pointHighlightFill: "#fff",
-			            pointHighlightStroke: "rgba(151,187,205,1)",
-			            data: dataArray//[65, 59, 80, 81, 56, 55, 40]
-			        },
-			        {
-			            label: "My Second dataset",
-			            fillColor: "rgba(151,187,205,0.2)",
-			            strokeColor: "rgba(151,187,205,1)",
-			            pointColor: "rgba(151,187,205,1)",
-			            pointStrokeColor: "#fff",
-			            pointHighlightFill: "#fff",
-			            pointHighlightStroke: "rgba(151,187,205,1)",
-			            data: [28, 48, 40, 19, 86, 27, 90]
-			        }
-	    		]*/
-		};
-		var myLineChart = new Chart(ctx).Line(dataChart);
-	}
 
 
 	tableHistoryThree.on( 'sort', function ( event, column ) {
@@ -225,6 +157,8 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-
 	  //sortColumn=column;
 	  this.set( 'sortColumn', column );
 	});
+
+
 
 	tableHistoryThree.on( 'sort2', function ( event, column ) {
 	  //alert(column);
@@ -252,8 +186,8 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-
 	  		//tableHistoryThree.set("aggregate.columns."+json["response"][i]["date"], json["response"][i]["aggregate"]);
 	  	}
 	  	hideAnimation("loading-screen");
-		buildChart(tableHistoryThree.get("response[1]"),'#myChart');
-		buildChart(tableHistoryThree.get("response[2]"),'#numberStoresBreakdown');
+		dashLineCharts.buildChart(tableHistoryThree.get("response[1]"),'#myChart');
+		dashLineCharts.buildChart(tableHistoryThree.get("response[2]"),'#numberStoresBreakdown');
 		//buildChart('response[1]','#myChart');
 	  }
 	});
@@ -269,15 +203,6 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-
 			}
 		}
 	});
-
-
-	function hideAnimation(initialID){ 
-
-		$("#load-one").fadeOut("slow");
-		$("#full-any-logo").delay( 100 ).fadeIn("fast");
-		$("#full-any-logo").delay( 100 ).addClass("animated flipInX");
-		$("#loading-screen").delay( 1400 ).slideUp( 500 );
-	}
 
     return tableHistoryThree;
 
