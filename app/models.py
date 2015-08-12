@@ -81,9 +81,16 @@ class Data(db.Model):
 	data = db.Column(db.String)
 	template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
 	active = db.Column(db.Boolean, default=True)
+	files = db.relationship('File',backref = 'Data', uselist = False)
 
 	def __repr__(self):
 		return '<Data %r>' % (self.data)
+
+class File(db.Model):
+	id = db.Column(db.Integer,primary_key=True)
+	name = db.Column(db.String)
+	filename = db.Column(db.String)
+	data_id = db.Column(db.Integer, db.ForeignKey('data.id'))
 
 class Action(db.Model):
     id = db.Column(db.Integer, primary_key = True)
