@@ -1,31 +1,45 @@
 from flask import render_template, flash, abort, request, jsonify, redirect, url_for, session, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from app import app, db, lm, bcrypt
+from app import app, db, lm, bcrypt, auth
 from .forms import LoginForm, UploadForm
 from .models import User, Action, Data, Template, Groups
 from datetime import datetime
 import json
 from functools import wraps
 
+
 def is_json(myjson):
   try:
-    json_object = json.loads(myjson)
+	json_object = json.loads(myjson)
   except ValueError, e:
-    return False
+	return False
   return True
 
+@auth.verify_password
+def verify_password(username, password):
+	user = User.query.filter_by(username=username, active = True).first()
+	if not user: 
+		return False
+	if bcrypt.check_password_hash(user.password.encode('utf-8'), password) == False:
+		return False
+	action = Action(action="API Log In", timestamp=datetime.utcnow(), user=user)
+	db.session.add(action)
+	db.session.commit()
+	g.user = user
+	return True
+
 def g_login_required(group="ANY"):
-    def wrapper(fn):
-        @wraps(fn)
-        def decorated_view(*args, **kwargs):
-            if not current_user.is_authenticated():
-               return lm.unauthorized()
-            group_object = Groups.query.filter_by(groupName=group, active = True).first()
-            if ( (group_object not in current_user.groups) and (group != "ANY")):
-                return lm.unauthorized()      
-            return fn(*args, **kwargs)
-        return decorated_view
-    return wrapper
+	def wrapper(fn):
+		@wraps(fn)
+		def decorated_view(*args, **kwargs):
+			if not current_user.is_authenticated():
+			   return lm.unauthorized()
+			group_object = Groups.query.filter_by(groupName=group, active = True).first()
+			if ( (group_object not in current_user.groups) and (group != "ANY")):
+				return lm.unauthorized()      
+			return fn(*args, **kwargs)
+		return decorated_view
+	return wrapper
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -156,14 +170,33 @@ def get_data():
 	return jsonify(response = response)
 
 
+def upload_data_worker(user, template, data):
+	if template is None or user is None or data is None:
+		return 400
+	#Grab all the templates the user can upload to 
+	templates = set()
+	for group in user.groups:
+		#Get all the templates in this group
+		for template in group.Templates:
+			templates.add(template)
+	#Check if the selected template is in the set
+	if template not in templates:
+		return 401
+	#Upload the data to the template
+	data = Data(data = data, template= template)
+	db.session.add(data)
+	db.session.commit()
+	return jsonify({'Data': request.json['data']})
+
 @app.route('/api/v1.0/uploadData', methods=['POST'])
-def upload_data():
-    if not request.json or not 'template' in request.json or not 'data' in request.json:
-        abort(400)
-    template = Template.query.filter_by(name=request.json['template'], active = True).first()
-    if template is None:
-    	abort(404)
-    data = Data(data = request.json['data'], template= template)
-    db.session.add(data)
-    db.session.commit()
-    return jsonify({'Data': request.json['data']}), 201
+@auth.login_required
+def upload_data_endpoint():
+	user = g.user
+	if not request.json or not 'template' in request.json or not 'data' in request.json:
+		abort(400)
+	template = Template.query.filter_by(name=request.json['template'], active = True).first()
+	retval = upload_data_worker(user=user,template=template, data=request.json['data'])
+	if retval is int:
+		abort(retval)
+	else:
+		return retval, 201
