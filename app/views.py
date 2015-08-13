@@ -1,4 +1,4 @@
-from flask import render_template, flash, abort, request, jsonify, redirect, url_for, session, g
+from flask import render_template, flash, abort, request, jsonify, redirect, url_for, session, g, send_from_directory
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, bcrypt, auth
 from .forms import LoginForm, UploadForm
@@ -6,7 +6,13 @@ from .models import User, Action, Data, Template, Groups
 from datetime import datetime
 import json
 from functools import wraps
+from werkzeug import secure_filename
+import os
 
+
+def allowed_file(filename):
+	return '.' in filename and \
+		   filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 def is_json(myjson):
   try:
@@ -200,3 +206,29 @@ def upload_data_endpoint():
 		abort(retval)
 	else:
 		return retval, 201
+
+
+@app.route('/api/v1.0/fileupload', methods=['GET', 'POST'])
+@auth.login_required
+def upload_file():
+	if request.method == 'POST':
+		file = request.files['file']
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			return redirect(url_for('uploaded_file', filename=filename))
+	return '''
+	<!doctype html>
+	<title>Upload new File</title>
+	<h1>Upload new File</h1>
+	<form action="" method=post enctype=multipart/form-data>
+	  <p><input type=file name=file>
+		 <input type=submit value=Upload>
+	</form>
+	'''
+
+@app.route('/api/v1.0/getupload/<filename>')
+def uploaded_file(filename):
+	return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+

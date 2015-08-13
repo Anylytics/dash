@@ -9,7 +9,6 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 auth = HTTPBasicAuth()
 
-
 import os
 from flask.ext.login import LoginManager
 #from flask.ext.openid import OpenID
