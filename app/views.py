@@ -65,7 +65,7 @@ def login():
 				db.session.commit()
 				login_user(user, remember=True)
 				return redirect(url_for("home_page"))
-	return render_template('login.html', name='login',form=form, providers=app.config['OPENID_PROVIDERS'])
+	return render_template('login.html', name='login',form=form)
 
 
 @app.route('/index')
