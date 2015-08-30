@@ -150,7 +150,20 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	  dataType: "json",
 	  data: JSON.stringify({"template": "Summary", "rows": 1}),
 	  success: function(json) {
-	  	tableHistoryThree.set("response", json["response"][0]);
+	  	var rawData = json.response[0];
+	  	for (objects in rawData) {
+	  		if (rawData[objects].name==null) {
+	  			rawData[objects].name="dataObj"+objects;
+	  		}
+	  		if (rawData[objects].width==null) {
+	  			rawData[objects].width=6;
+	  		}
+	  		if (rawData[objects].type==null) {
+	  			rawData[objects].type="table";
+	  		}
+	  	}
+	  	console.log(rawData);
+	  	tableHistoryThree.set("response", rawData);
 	  	var responseObj = tableHistoryThree.get("response");
 	  	for (objects in responseObj) {
 	  		if (responseObj[objects].type=="line-graph") {
@@ -159,7 +172,6 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	  		if (responseObj[objects].type=="table") {
 	  			var headersVar = buildHeaderArray(responseObj[objects].headers);
 				var dataVar = buildRowArray(responseObj[objects].rows,headersVar);
-				console.log(responseObj[objects].name);
 
 			    $('#'+responseObj[objects].name).DataTable({
 			    	"columns":headersVar,
