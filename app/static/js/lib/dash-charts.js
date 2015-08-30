@@ -46,12 +46,14 @@ function buildLineChart(dataObj, chartID) {
 		var tmpObj = {};
 		tmpObj.data = [];
 		tmpObj.label = groupArray[groupVal];
-		tmpObj.fillColor 				= dashChartThemes[groupVal].fillColor//"rgba(151,187,205,0.2)";
-		tmpObj.strokeColor 				= dashChartThemes[groupVal].strokeColor//"rgba(151,187,205,1)";
-		tmpObj.pointColor 				= dashChartThemes[groupVal].pointColor//"rgba(151,187,205,1)";
-		tmpObj.pointStrokeColor 		= dashChartThemes[groupVal].pointStrokeColor//"#fff";
-		tmpObj.pointHighlightFill 		= dashChartThemes[groupVal].pointHighlightFill//"#fff";
-		tmpObj.pointHighlightStroke 	= dashChartThemes[groupVal].pointHighlightStroke//"rgba(151,187,205,1)";
+		//tmpObj.bezierCurve = false;
+		tmpObj.fillColor 				= dashChartThemes[groupVal].fillColor;//"rgba(151,187,205,0.2)";
+		tmpObj.strokeColor 				= dashChartThemes[groupVal].strokeColor;//"rgba(151,187,205,1)";
+		tmpObj.pointColor 				= dashChartThemes[groupVal].pointColor;//"rgba(151,187,205,1)";
+		tmpObj.pointStrokeColor 		= dashChartThemes[groupVal].pointStrokeColor;//"#fff";
+		tmpObj.pointHighlightFill 		= dashChartThemes[groupVal].pointHighlightFill;//"#fff";
+		tmpObj.pointHighlightStroke 	= dashChartThemes[groupVal].pointHighlightStroke;//"rgba(151,187,205,1)";
+		tmpObj.legendTemplate 			= "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 		for (dataObj in dataObjArray) {
 			if (groupArray[groupVal]==dataObjArray[dataObj].group) {
 				tmpObj.data.push(dataObjArray[dataObj].value);
@@ -64,5 +66,6 @@ function buildLineChart(dataObj, chartID) {
     	labels: labelArray,
     	datasets: dataSetArray
 	};
-	var myLineChart = new Chart(ctx).Line(dataChart);
+
+	var myLineChart = new Chart(ctx).Line(dataChart, {responsive:true,bezierCurve:false});
 }

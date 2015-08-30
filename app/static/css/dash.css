@@ -207,6 +207,7 @@ body {
 	padding:10px;
 	margin:10px;
 	text-align:left;
+	background-color:white;
 }
 
 .dash-widget:hover {
@@ -262,6 +263,19 @@ h4 > .glyphicon {
 .dash-widget-upload > h5 {
 	margin:25px;
 	text-align:center;
+}
+
+.floatBox {
+	position:fixed;
+	z-index:10;
+}
+
+.fixedRight {
+	right:0;
+}
+
+.fixedLeft {
+	left:0;
 }
 
 /******* REPORTS ********/

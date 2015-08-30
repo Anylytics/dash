@@ -1,5 +1,5 @@
 // Now we've configured RequireJS, we can load our dependencies and start
-define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-widget',  'jquery', 'Chart', 'dashcharts', 'dashglobals'], function ( Ractive, html, load, $, Chart, dashcharts, dashglobals) {
+define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget',  'jquery', 'Chart', 'dashcharts', 'dashglobals', 'datatables'], function ( Ractive, html, load, $, Chart, dashcharts, dashglobals, datatables) {
 
 	/*INITIALIZATIONS*/
 	Ractive.partials.loadingWidget = load;
@@ -9,7 +9,8 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-
     var tableHistoryThree = new Ractive({
       el: 'tableHistoryThree',
       data: {
-      	response: {},
+      	"response": {},
+      	"currentFilter": "",
       	"summary": 
       		{
       			title: "Summary",
@@ -21,10 +22,10 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-
 	      						{"name":"percentage", 	"label":"Percentage"}
       						],
 	      		rows: 		[
-	      						{"state":"Healthy","direction":"increased","percentage":23},
-	      						{"state":"OK","direction":"increased","percentage":51},
-	      						{"state":"ICU","direction":"decreased","percentage":7},
-	      						{"state":"Dead","direction":"increased","percentage":55}
+							{"group":"","text":"Number of healthy stores increased by 23%","direction":"increased","percentage":23},
+	      						{"group":"","text":"Number of OK stores decreased by 3%","direction":"increased","percentage":51},
+	      						{"group":"","text":"Number of ICU stores increased by 33%","direction":"decreased","percentage":7},
+	      						{"group":"","text":"Number of dead stores increased by 2%","direction":"increased","percentage":55}
 	      					]
       		},
       	"numberStores": 
@@ -136,39 +137,10 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-
 	      						{"city":"New Stores","nostore":15,"dead":34,"icu":31,"ok":126,"healthy":133},
 	      						{"city":"Pune","nostore":2,"dead":4,"icu":2,"ok":123,"healthy":13}
 							]
-			},
-
-      	sort: function ( array, column ) {
-    			array = array.slice(); // clone, so we don't modify the underlying data
-				
-    			return array.sort( function ( a, b ) {
-    				return a[ column ] < b[ column ] ? -1 : 1;
-    			});
 			}
       },
-    	sortColumn: 'date',
-    	sortColumnTwo: 'city',
     template: html
     });
-
-
-	tableHistoryThree.on( 'sort', function ( event, column ) {
-	  //alert(column);
-	  //sortColumn=column;
-	  this.set( 'sortColumn', column );
-	});
-
-
-
-	tableHistoryThree.on( 'sort2', function ( event, column ) {
-	  //alert(column);
-	  //sortColumn=column;
-	  this.set( 'sortColumnTwo', column );
-
-		this.animate( 'sortColumnTwo', column, {
-		  easing: 'easeOut'
-		});
-	});
 
 	//tableHistoryThree.set("current.rows", tableHistoryThree.get("response[0].summary"))
 	$.ajax({
@@ -179,29 +151,55 @@ define([ 'ractive', 'rv!../ractive/table-history-three', 'rv!../ractive/loading-
 	  data: JSON.stringify({"template": "Summary", "rows": 1}),
 	  success: function(json) {
 	  	tableHistoryThree.set("response", json["response"][0]);
-	  	//console.log(JSON.stringify(tableHistoryThree.get("response")));
-	  	//tableHistoryThree.set("current.rows", tableHistoryThree.get("response[0].summary"))
-	  	for (var i =0; i<json["response"].length; i++)
+	  	var responseObj = tableHistoryThree.get("response");
+	  	for (objects in responseObj) {
+	  		if (responseObj[objects].type=="line-graph") {
+	  			dashLineCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name)
+	  		}
+	  		if (responseObj[objects].type=="table") {
+	  			var headersVar = buildHeaderArray(responseObj[objects].headers);
+				var dataVar = buildRowArray(responseObj[objects].rows,headersVar);
+				console.log(responseObj[objects].name);
+
+			    $('#'+responseObj[objects].name).DataTable({
+			    	"columns":headersVar,
+			    	"data":dataVar,
+			    	"paging":false,
+			    	"info":false
+			    });
+	  		}
+
+	  	}
+	  	/*for (var i =0; i<json["response"].length; i++)
 	  	{
 	  		//tableHistoryThree.set("aggregate.columns."+json["response"][i]["date"], json["response"][i]["aggregate"]);
-	  	}
+	  	}*/
 	  	hideAnimation("loading-screen");
-		dashLineCharts.buildChart(tableHistoryThree.get("response[1]"),'#myChart');
-		dashLineCharts.buildChart(tableHistoryThree.get("response[2]"),'#numberStoresBreakdown');
-		//buildChart('response[1]','#myChart');
+		//dashLineCharts.buildChart(tableHistoryThree.get("response[2]"),'#numberStoresBreakdown');
+		tableHistoryThree.set("currentFilter",tableHistoryThree.get("response[5].city[0].name"));
+		$(document).ready(function(){
+		    $('#response-3').DataTable({
+		    	"paging":false,
+		    	"info":false
+		    });
+		});
+
 	  }
 	});
 
 	tableHistoryThree.on( 'changeFocus', function( event, object )  {
-		
 		var response = tableHistoryThree.get("response");
 		for (var i =0; i<response.length; i++)
 		{
 			if (response[i]["date"] == object)
-			{
-				tableHistoryThree.set("current.rows", response[i]["summary"]);
-			}
+				{
+					tableHistoryThree.set("current.rows", response[i]["summary"]);
+				}
 		}
+	});
+
+	$("#filterBox").change(function() {
+		tableHistoryThree.set("currentFilter",$("#filterBox").val());
 	});
 
     return tableHistoryThree;

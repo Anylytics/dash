@@ -8,6 +8,7 @@ require.config({
         jquery: 'lib/jquery-1.11',
         jqueryui: 'lib/jquery_ui',
         bootstrap: 'bootstrap/bootstrap.min',
+        datatables: 'lib/table',
         Chart: 'lib/Chart.min',
         dashcharts: 'lib/dash-charts',
         dashglobals: 'lib/dash-globals'

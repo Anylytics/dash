@@ -1,25 +1,23 @@
 {{>loadingWidget}}
+<div class="floatBox fixedLeft">
+	<div class="dash-widget">
+		<div class="dash-widget-header">
+			<h4><i class="glyphicon glyphicon-tasks"></i>Choose City</h4>
+		</div>
+		<div class="dash-widget-content">
+			<div class="form-group">
+			  <label for="sel1">Chosen Filter: {{currentFilter}}</label>
+			  <select class="form-control" id="filterBox">
+			  	{{#each response[5].city}}
+			    	<option value="{{this.name}}">{{this.label}}</option>
+			  	{{/each}}
+			  </select>
+			</div>
+		</div><!--End Content-->
+	</div>
+</div>
 <div class="row">
 	<div class="col-sm-12">
-		<div class="dash-widget">
-			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-tasks"></i>Choose Report</h4>
-			</div>
-			<div class="dash-widget-content">
-				<div class="form-group">
-				  <label for="sel1">Select list:</label>
-				  <select class="form-control" id="sel1">
-				    <option></option>
-				    <option>1</option>
-				    <option>2</option>
-				    <option>3</option>
-				    <option>4</option>
-				  </select>
-				</div>
-			</div><!--End Content-->
-		</div>
-	</div><!--End col-sm-6-->
-	<div class="col-sm-6">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
 				<h4><i class="glyphicon glyphicon-tasks"></i>Download Report</h4>
@@ -38,6 +36,7 @@
 			</div>
 			<div class="dash-widget-content">
 				{{#each response[0].rows}}
+				{{#if this.city==currentFilter}}
 					<div class="dash-widget-line-item">
 						<div class="line-item-icon any-inline">
 							{{#if this.direction=="increased"}}
@@ -48,9 +47,10 @@
 							{{this.percentage}}%
 						</div>
 						<div class="line-item-content any-inline">
-							Number of {{this.state}} stores {{this.direction}} by {{this.percentage}}%
+							{{this.text}}
 						</div>
 					</div>
+				{{/if}}
 				{{/each}}
 			</div><!--End Content-->
 		</div>
@@ -61,12 +61,12 @@
 				<h4><i class="glyphicon glyphicon-tasks"></i>{{response[3].title}}</h4>
 			</div>
 			<div class="dash-widget-content">
-				<table class="table">
+				<table class="table" id="response-3">
 				<caption>{{response[3].subheading}}</caption>
 					<thead>
 						<tr>
 							{{#each response[3].headers}}
-								<th class="sortable {{ sortColumn === this.name  ? "sorted" : "" }}" on-click='sort:{{this.name}}'><i class="glyphicon glyphicon-play-circle push"></i>{{this.label}}</th>
+								<th>{{this.label}}</th>
 							{{/each}}
 						</tr>
 					</thead>
@@ -81,7 +81,6 @@
 						{{/each}}
 					</tbody>
 				</table>
-				<canvas id="myChart" style="width:100%;"></canvas>
 			</div><!--End Content-->
 		</div>
 	</div><!--End col-sm-6-->	
@@ -104,28 +103,8 @@
 				<h4><i class="glyphicon glyphicon-tasks"></i>{{response[4].title}}</h4>
 			</div>
 			<div class="dash-widget-content">
-				<table class="table">
-				<caption>{{response[4].subheading}}</caption>
-					<thead>
-						<tr>
-							{{#each response[4].headers}}
-								<th class="sortable {{ sortColumnTwo === this.name  ? "sorted" : "" }}" on-click='sort2:{{this.name}}'><i class="glyphicon glyphicon-play-circle push"></i>{{this.label}}</th>
-							{{/each}}
-						</tr>
-					</thead>
-					<tbody>
-						{{#each sort(response[4].rows, sortColumnTwo):num}}
-							<tr>
-								<!--<th scope="row">{{this}}</th>-->
-								{{#each this}}
-									<td>{{this}}</td>
-								{{/each}}
-							</tr>
-						{{/each}}
-					</tbody>
-				</table>
+				<table id="example" class="display" width="100%"></table>
 			</div><!--End Content-->
 		</div>
 	</div><!--End col-sm-6-->
-	</div>
 </div>

@@ -1,0 +1,77 @@
+{{>loadingWidget}}
+<div class="floatBox fixedLeft hidden-xs">
+	<div class="dash-widget">
+		<div class="dash-widget-header">
+			<h4><i class="glyphicon glyphicon-tasks"></i>Choose City</h4>
+		</div>
+		<div class="dash-widget-content">
+			<div class="form-group">
+			  <label for="sel1">Chosen Filter: {{currentFilter}}</label>
+			  <select class="form-control" id="filterBox">
+			  	{{#each response}}
+			  		{{#if this.type=="meta"}}
+			  			{{#each this.city}}
+			    		<option value="{{this.name}}">{{this.label}}</option>
+			  			{{/each}}
+			    	{{/if}}
+			  	{{/each}}
+			  </select>
+			</div>
+		</div><!--End Content-->
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4><i class="glyphicon glyphicon-tasks"></i>Download Report</h4>
+			</div>
+			<div class="dash-widget-content">
+				<button type="button" class="btn btn-default">
+					<i  class="glyphicon glyphicon-download pad-right" aria-hidden="true"></i><span>Download</span>
+				</button>
+			</div><!--End Content-->
+		</div>
+	</div><!--End col-sm-6-->
+</div>
+<div class="row">
+{{#each response}}
+{{#if this.type!="meta"}}
+	<div class="col-sm-{{this.width}}">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4><i class="glyphicon glyphicon-tasks"></i>{{this.title}}</h4>
+			</div>
+			<div class="dash-widget-content">
+				<p>{{this.subheading}}</p>
+				{{#if this.type=="table"}}
+					<table id="{{this.name}}" class="display" width="100%"></table>
+				{{/if}}
+				{{#if this.type=="line-graph"}}
+					<canvas id="{{this.name}}" style="width:100%;"></canvas>
+				{{/if}}
+				{{#if this.type=="summary"}}
+					{{#each this.rows}}
+						<!--{{#if this.city==currentFilter}}-->
+							<div class="dash-widget-line-item">
+								<div class="line-item-icon any-inline">
+									{{#if this.direction=="increased"}}
+										<i class="glyphicon glyphicon-arrow-up"></i>
+									{{else}}
+										<i class="glyphicon glyphicon-arrow-down"></i>
+									{{/if}}
+									{{this.percentage}}%
+								</div>
+								<div class="line-item-content any-inline">
+									{{this.text}}
+								</div>
+							</div>
+						<!--{{/if}}-->
+					{{/each}}
+				{{/if}}
+			</div><!--End Content-->
+		</div>
+	</div><!--End col-sm-->
+{{/if}}
+{{/each}}
+</div>
