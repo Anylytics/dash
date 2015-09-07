@@ -49,6 +49,7 @@
 				{{/if}}
 				{{#if this.type=="line-graph"}}
 					<canvas id="{{this.name}}" style="width:100%;"></canvas>
+					<div id="{{this.name}}-legend" class="dash-legends"></div>
 				{{/if}}
 				{{#if this.type=="summary"}}
 					{{#each this.rows}}

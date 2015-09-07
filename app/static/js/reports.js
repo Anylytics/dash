@@ -167,7 +167,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	  	var responseObj = tableHistoryThree.get("response");
 	  	for (objects in responseObj) {
 	  		if (responseObj[objects].type=="line-graph") {
-	  			dashLineCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name)
+	  			dashLineCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name);
 	  		}
 	  		if (responseObj[objects].type=="table") {
 	  			var headersVar = buildHeaderArray(responseObj[objects].headers);
