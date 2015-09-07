@@ -360,12 +360,16 @@ body {
 .line-legend {
 	display:inline;
 	list-style:none;
-	padding:20px;
-	padding-right:40px;
+	padding:10px;
+	padding-right:20px;
 	border-style:solid;
 	border-width:1px;
-	border-color:grey;
-	border-radius:10px;
+	border-color:gainsboro;
+	border-radius:5px;
+}
+
+.line-legend:hover {
+	border-color:black;
 }
 
 .line-legend > li > span {
