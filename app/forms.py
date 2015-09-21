@@ -10,4 +10,5 @@ class LoginForm(Form):
 
 class UploadForm(Form):
 	templateid = SelectField('templateid',coerce=int, validators=[DataRequired()])
+	fileid = IntegerField('fileid')
 	data =StringField('data', widget=TextArea(), validators=[DataRequired()])

@@ -2,13 +2,13 @@ from flask import render_template, flash, abort, request, jsonify, redirect, url
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, bcrypt, auth
 from .forms import LoginForm, UploadForm
-from .models import User, Action, Data, Template, Groups
+from .models import User, Action, Data, Template, Groups, File
 from datetime import datetime
 import json
 from functools import wraps
 from werkzeug import secure_filename
 import os
-
+import time
 
 def allowed_file(filename):
 	return '.' in filename and \
@@ -113,7 +113,6 @@ def admin_upload_page():
 	form.templateid.choices = [[t.id, t.name] for t in templates]
 
 	if form.validate_on_submit():
-			
 		action = Action(action = "Uploaded Data via Admin Panel", timestamp = datetime.utcnow(), user = user)
 		db.session.add(action)
 		#Validate that the data is json
@@ -122,15 +121,19 @@ def admin_upload_page():
 		else:
 			#Find the template the user has selected
 			template_id = form.templateid.data
+			file_id = form.fileid.data
+			file_selected = File.query.filter_by(id=file_id).first()
 			template = Template.query.filter_by(id=template_id, active=True).first()
 			if template is None:
 				flash('Could not find template' , 'success')
+			elif file_selected is None:
+				flash('Could not find associated file', 'success')
 			else:
 				data = Data(data = form.data.data, template= template)
 				db.session.add(data)
 				flash('Successfully Uploaded Data to '+template.name)
-				
 		db.session.commit()
+		print Data.query.order_by(Data.id.desc()).first().id
 	else:
 		action = Action(action = "Accessed Admin Upload Panel", timestamp = datetime.utcnow(), user = user)
 		db.session.add(action)
@@ -176,7 +179,7 @@ def get_data():
 	return jsonify(response = response)
 
 
-def upload_data_worker(user, template, data):
+def upload_data_worker(user, template, data, file_id=None):
 	if template is None or user is None or data is None:
 		return 400
 	#Grab all the templates the user can upload to 
@@ -208,21 +211,29 @@ def upload_data_endpoint():
 		return retval, 201
 
 
-@app.route('/api/v1.0/fileupload', methods=['GET', 'POST'])
+@app.route('/api/v1.0/fileUpload', methods=['GET', 'POST'])
 @auth.login_required
 def upload_file():
 	if request.method == 'POST':
 		file = request.files['file']
 		if file and allowed_file(file.filename):
-			filename = secure_filename(file.filename)
+			filename = secure_filename(file.filename)+str(time.time())
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			return redirect(url_for('uploaded_file', filename=filename))
+			#action = Action(action = "Uploaded File via API", timestamp = datetime.utcnow(), user = user)
+			file_db = File(filename=filename, name=file.filename)
+			#db.session.add(action)
+			db.session.add(file_db)
+			db.session.commit()
+			return jsonify({'file_id': file_db.id})
+			#return redirect(url_for('uploaded_file', filename=filename))
+
 	return '''
 	<!doctype html>
 	<title>Upload new File</title>
 	<h1>Upload new File</h1>
 	<form action="" method=post enctype=multipart/form-data>
 	  <p><input type=file name=file>
+	  	 <input type=text name=template>
 		 <input type=submit value=Upload>
 	</form>
 	'''
