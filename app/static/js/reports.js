@@ -10,6 +10,8 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
       el: 'tableHistoryThree',
       data: {
       	"response": {},
+      	"file_id": {},
+      	"filename": {},
       	"currentFilter": "",
       	"summary": 
       		{
@@ -151,6 +153,8 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	  data: JSON.stringify({"template": "Summary", "rows": 1}),
 	  success: function(json) {
 	  	var rawData = json.response[0];
+	  	var file_id = json.response[1];
+	  	var filename = json.response[2];
 	  	for (objects in rawData) {
 	  		if (rawData[objects].name==null) {
 	  			rawData[objects].name="dataObj"+objects;
@@ -163,7 +167,11 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	  		}
 	  	}
 	  	console.log(rawData);
+	  	console.log(file_id);
+	  	console.log(filename)
 	  	tableHistoryThree.set("response", rawData);
+	  	tableHistoryThree.set("file_id",file_id);
+	  	tableHistoryThree.set("filename", filename);
 	  	var responseObj = tableHistoryThree.get("response");
 	  	for (objects in responseObj) {
 	  		if (responseObj[objects].type=="line-graph") {

@@ -129,7 +129,7 @@ def admin_upload_page():
 			elif file_selected is None:
 				flash('Could not find associated file', 'success')
 			else:
-				data = Data(data = form.data.data, template= template)
+				data = Data(data = form.data.data, template = template, file_id = file_id)
 				db.session.add(data)
 				flash('Successfully Uploaded Data to '+template.name)
 		db.session.commit()
@@ -176,6 +176,10 @@ def get_data():
 	response = []
 	for row in data:
 		response.append(json.loads(row.data))
+		file_selected = File.query.filter_by(id=row.file_id).first()
+		if file_selected is not None:
+			response.append(row.file_id)
+			response.append(file_selected.name)
 	return jsonify(response = response)
 
 
@@ -192,7 +196,7 @@ def upload_data_worker(user, template, data, file_id=None):
 	if template not in templates:
 		return 401
 	#Upload the data to the template
-	data = Data(data = data, template= template)
+	data = Data(data = data, template= template, file_id = file_id)
 	db.session.add(data)
 	db.session.commit()
 	return jsonify({'Data': request.json['data']})
@@ -204,7 +208,7 @@ def upload_data_endpoint():
 	if not request.json or not 'template' in request.json or not 'data' in request.json:
 		abort(400)
 	template = Template.query.filter_by(name=request.json['template'], active = True).first()
-	retval = upload_data_worker(user=user,template=template, data=request.json['data'])
+	retval = upload_data_worker(user=user,template=template, data=request.json['data'], file_id = request.json['file_id'])
 	if retval is int:
 		abort(retval)
 	else:
@@ -238,8 +242,12 @@ def upload_file():
 	</form>
 	'''
 
-@app.route('/api/v1.0/getupload/<filename>')
-def uploaded_file(filename):
-	return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+@app.route('/api/v1.0/getupload/<file_id>')
+def uploaded_file(file_id):
+	file_selected = File.query.filter_by(id=file_id).first()
+	if file_selected is not None:
+		return send_from_directory(app.config['UPLOAD_FOLDER'], file_selected.filename)
+	else:
+		abort(201)
 
 
