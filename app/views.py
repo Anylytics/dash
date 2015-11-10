@@ -1,7 +1,7 @@
 from flask import render_template, flash, abort, request, jsonify, redirect, url_for, session, g, send_from_directory
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, bcrypt, auth
-from .forms import LoginForm, UploadForm
+from .forms import LoginForm, UploadForm, CreateUserForm
 from .models import User, Action, Data, Template, Groups, File
 from datetime import datetime
 import json
@@ -139,6 +139,15 @@ def admin_upload_page():
 		db.session.add(action)
 		db.session.commit()
 	return render_template('admin-upload.html', name='admin', user=user, templates=list(templates), form=form)
+
+
+@app.route('/user-admin', methods=['GET', 'POST'])
+@g_login_required(group="Admin")
+def user_admin_page():
+	user=g.user
+	form = CreateUserForm()
+	templates = set()
+	return render_template('user-admin.html', name='user-admin', user=user, templates=list(templates), form=form)
 
 
 
