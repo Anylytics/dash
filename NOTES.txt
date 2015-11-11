@@ -1,0 +1,30 @@
+######################
+#	Debugging Dash   #
+######################
+
+1) Open Python in a terminal
+
+(anylyticsenv)> $ python                                           [±master ●●]
+Python 2.7.9 (default, Feb 10 2015, 03:28:08) 
+[GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.56)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+
+2) Import dependencies
+
+from app import *
+from app.models import *
+
+3) Go nuts
+
+
+######################
+#	      MISC       #
+######################
+
+
+curl -i -u User:Pass -X POST -F file=@payload.zip http://127.0.0.1:3000/api/v1.0/fileUpload
+
+curl -i -H "Content-Type: application/json" -X POST -d '{"title":"Read a book"}' localhost:3000/api/v1.0/createUser
+
+
+curl -i -u User:Pass -H "Content-Type: application/json" -X POST -d '{"username":"Test", "email":"Test", "password":"Test"}' localhost:3000/api/v1.0/createUser

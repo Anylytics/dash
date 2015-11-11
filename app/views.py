@@ -6,6 +6,7 @@ from .models import User, Action, Data, Template, Groups, File
 from datetime import datetime
 import json
 from functools import wraps
+from sqlalchemy.exc import IntegrityError
 from werkzeug import secure_filename
 import os
 import time
@@ -100,7 +101,7 @@ def reports_page():
 	return render_template('reports.html', name='reports', user=user)
 
 @app.route('/admin-upload', methods=['GET', 'POST'])
-@g_login_required(group="Admin")
+@g_login_required(group=app.config['ADMIN_GROUP'])
 def admin_upload_page():
 	user=g.user
 	form = UploadForm()
@@ -140,8 +141,6 @@ def admin_upload_page():
 		db.session.commit()
 	return render_template('admin-upload.html', name='admin', user=user, templates=list(templates), form=form)
 
-
-
 @app.route('/settings')
 @login_required
 def settings_page():
@@ -166,22 +165,20 @@ def get_data():
 	print request.json
 	if not request.json or not 'template' in request.json: 
 		abort(400)
-	numRows = request.json.get('rows', 1)
 	#First get the associated template
 	template = Template.query.filter_by(name=request.json['template'], active = True).first()
 	if template is None:
 		abort(404)
 	#From the template get the data requested
-	data = template.data.filter_by(active=True).order_by(Data.id.desc()).limit(numRows).all()
+	data = template.data.filter_by(active=True).order_by(Data.id.desc()).first()
 	response = []
-	for row in data:
-		response.append(json.loads(row.data))
-		file_selected = File.query.filter_by(id=row.file_id).first()
-		if file_selected is not None:
-			response.append(row.file_id)
-			response.append(file_selected.name)
+	response.append(json.loads(data.data))
+	file_selected = File.query.filter_by(id=data.file_id).first()
+	if file_selected is not None:
+		response.append(data.file_id)
+		response.append(file_selected.name)
 	return jsonify(response = response)
-
+	
 
 def upload_data_worker(user, template, data, file_id=None):
 	if template is None or user is None or data is None:
@@ -229,8 +226,7 @@ def upload_file():
 			db.session.add(file_db)
 			db.session.commit()
 			return jsonify({'file_id': file_db.id})
-			#return redirect(url_for('uploaded_file', filename=filename))
-
+	#TODO: This is debug code, perhaps we should remove it? 
 	return '''
 	<!doctype html>
 	<title>Upload new File</title>
@@ -241,6 +237,67 @@ def upload_file():
 		 <input type=submit value=Upload>
 	</form>
 	'''
+			
+@app.route('/api/v1.0/createGroup', methods=['POST'])
+@auth.login_required
+def api_create_group():
+	user = g.user
+	#Get the Admin group
+	admin_group = Groups.query.filter_by(groupName=app.config['ADMIN_GROUP'], active = True).first()
+	if admin_group is not None and admin_group in user.groups:
+		if not request.json:
+			abort(400)
+		if 'groupname' not in request.json:
+			abort(400)
+		groupname = request.json['groupname']
+		action = Action(action = "Admin Creating Group", timestamp = datetime.utcnow(), user = user)
+		db.session.add(action)
+		return create_group(groupname)
+	else:
+		abort(401)
+
+def create_group(groupname):
+	group = Groups(groupName = groupname)
+	db.session.add(group)
+	try:
+		db.session.commit()
+		return "SUCCESS", 201
+	except:
+		db.session.rollback()
+		return "Integrity Error: Duplicate Group", 409
+
+
+@app.route('/api/v1.0/createUser', methods=['POST'])
+@auth.login_required
+def api_create_user():
+	user = g.user
+	#Get the Admin group
+	admin_group = Groups.query.filter_by(groupName=app.config['ADMIN_GROUP'], active = True).first()
+	if admin_group is not None and admin_group in user.groups:
+		if not request.json:
+			abort(400)
+		if 'username' not in request.json or 'email' not in request.json or 'password' not in request.json:
+			abort(400)
+		username=request.json['username']
+		email=request.json['email']
+		password=request.json['password']
+		action = Action(action = "Admin Creating User", timestamp = datetime.utcnow(), user = user)
+		db.session.add(action)
+		return create_user(username, email, password)
+	else:
+		abort(401)
+
+def create_user(username, email, password):
+	user = User(username=username, email=email, password=bcrypt.generate_password_hash(password))
+	db.session.add(user)
+	try:
+		db.session.commit()
+		return "SUCCESS", 201
+	except IntegrityError:
+		db.session.rollback()
+		return "Integrity Error: Duplicate User", 409
+
+
 
 @app.route('/api/v1.0/getupload/<file_id>')
 def uploaded_file(file_id):
