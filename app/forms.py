@@ -12,3 +12,9 @@ class UploadForm(Form):
 	templateid = SelectField('templateid',coerce=int, validators=[DataRequired()])
 	fileid = IntegerField('fileid')
 	data =StringField('data', widget=TextArea(), validators=[DataRequired()])
+
+class CreateUserForm(Form):
+	name = StringField('name',validators=[DataRequired()])
+	username = StringField('userid',validators=[DataRequired()])
+	password = PasswordField('password',validators=[DataRequired()])
+	email = StringField('email',validators=[DataRequired()])
