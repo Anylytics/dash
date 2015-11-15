@@ -19,7 +19,7 @@ lm.init_app(app)
 lm.login_view = 'login'
 #oid = OpenID(app,os.path.join(basedir, 'tmp'))
 
-from app import views, models
+from app import views, api, models
 
 
 #if __name__ == '__main__':

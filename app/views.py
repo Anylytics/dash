@@ -247,66 +247,6 @@ def upload_file():
 	</form>
 	'''
 			
-@app.route('/api/v1.0/createGroup', methods=['POST'])
-@auth.login_required
-def api_create_group():
-	user = g.user
-	#Get the Admin group
-	admin_group = Groups.query.filter_by(groupName=app.config['ADMIN_GROUP'], active = True).first()
-	if admin_group is not None and admin_group in user.groups:
-		if not request.json:
-			abort(400)
-		if 'groupname' not in request.json:
-			abort(400)
-		groupname = request.json['groupname']
-		action = Action(action = "Admin Creating Group", timestamp = datetime.utcnow(), user = user)
-		db.session.add(action)
-		return create_group(groupname)
-	else:
-		abort(401)
-
-def create_group(groupname):
-	group = Groups(groupName = groupname)
-	db.session.add(group)
-	try:
-		db.session.commit()
-		return "SUCCESS", 201
-	except:
-		db.session.rollback()
-		return "Integrity Error: Duplicate Group", 409
-
-
-@app.route('/api/v1.0/createUser', methods=['POST'])
-@auth.login_required
-def api_create_user():
-	user = g.user
-	#Get the Admin group
-	admin_group = Groups.query.filter_by(groupName=app.config['ADMIN_GROUP'], active = True).first()
-	if admin_group is not None and admin_group in user.groups:
-		if not request.json:
-			abort(400)
-		if 'username' not in request.json or 'email' not in request.json or 'password' not in request.json:
-			abort(400)
-		username=request.json['username']
-		email=request.json['email']
-		password=request.json['password']
-		action = Action(action = "Admin Creating User", timestamp = datetime.utcnow(), user = user)
-		db.session.add(action)
-		return create_user(username, email, password)
-	else:
-		abort(401)
-
-def create_user(username, email, password):
-	user = User(username=username, email=email, password=bcrypt.generate_password_hash(password))
-	db.session.add(user)
-	try:
-		db.session.commit()
-		return "SUCCESS", 201
-	except IntegrityError:
-		db.session.rollback()
-		return "Integrity Error: Duplicate User", 409
-
-
 
 @app.route('/api/v1.0/getupload/<file_id>')
 def uploaded_file(file_id):

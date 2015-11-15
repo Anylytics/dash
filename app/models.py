@@ -39,6 +39,12 @@ class User(db.Model):
 	def get_groups(self):
             return self.groups
 	
+	def get_json(self):
+		my_groups = []
+		for group in self.groups:
+			my_groups.append(group.groupName)
+		return {'username': self.username, 'email': self.email, 'groups': my_groups}
+
 	def __repr__(self):
 		return '<User %r>' % (self.username)
 
@@ -56,6 +62,14 @@ class Groups(db.Model):
 	parent_id = db.Column(db.Integer,db.ForeignKey('groups.id'))
 	parent = db.relationship('Groups',lazy = True, backref = 'children', remote_side = [id])
 
+	def get_json(self):
+		my_templates = []
+		for template in self.Templates:
+			my_templates.append(template.name)
+		my_parent = None
+		if self.parent is not None:
+			my_parent = self.parent.groupName
+		return {'groupname': self.groupName, 'parent': my_parent, 'templates': my_templates}
 
 	def __repr__(self):
 		return '<Group %r>' % (self.groupName)
@@ -72,6 +86,10 @@ class Template(db.Model):
 	Groups = db.relationship('Groups',
 							secondary = groupTemplate,
 							backref = 'template')
+
+	def get_json(self):
+		return {'name': self.name, 'filename': self.filename}
+
 	def __repr__(self):
 		return '<Template %r>' % (self.name)
 

@@ -20,7 +20,7 @@ from app.models import *
 ######################
 #	      MISC       #
 ######################
-
+curl -i -u User:Pass http://localhost:3000/api/v1.0/getUsers
 
 curl -i -u User:Pass -X POST -F file=@payload.zip http://127.0.0.1:3000/api/v1.0/fileUpload
 
