@@ -28,3 +28,34 @@ curl -i -H "Content-Type: application/json" -X POST -d '{"title":"Read a book"}'
 
 
 curl -i -u User:Pass -H "Content-Type: application/json" -X POST -d '{"username":"Test", "email":"Test", "password":"Test"}' localhost:3000/api/v1.0/createUser
+
+
+######################
+#	      API        #
+######################
+
+
+
+/api/v1.0/createGroup - POST [ADMIN ONLY]
+	groupname
+
+/api/v1.0/createUser - POST [ADMIN ONLY]
+	username
+	email
+	password
+
+/api/v1.0/joinGroup - POST [ADMIN ONLY]
+	username
+	groupname
+
+/api/v1.0/associateTemplate	- POST [ADMIN ONLY]
+	groupname
+	templatename
+
+/api/v1.0/getGroups - GET [ADMIN ONLY]
+
+/api/v1.0/getUsers - GET [ADMIN ONLY]
+
+/api/v1.0/getTemplates - GET
+
+
