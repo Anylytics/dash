@@ -167,12 +167,13 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 
 	function getReportData(templateName) {
 		toggleLoading();
+		tableHistoryThree.set("response", {});
 		$.ajax({
 		  type: "POST",
 		  url: "./api/v1.0/getData",
 		  contentType : 'application/json',
 		  dataType: "json",
-		  data: JSON.stringify({"template": "Summary", "rows": 1}),
+		  data: JSON.stringify({"template": templateName, "rows": 1}),
 		  success: function(json) {
 		  	var rawData = json.response[0];
 		  	var file_id = json.response[1];

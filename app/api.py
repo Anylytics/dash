@@ -73,6 +73,28 @@ def create_user(username, email, password):
 		db.session.rollback()
 		return "Integrity Error: Duplicate User", 409
 
+@app.route('/api/v1.0/createTemplate', methods=['POST'])
+@auth.login_required
+def api_create_template():
+	user = g.user
+	if isadmin(user):
+		if not request.json:
+			abort(400)
+		if 'templatename' not in request.json:
+			abort(400)
+		name = request.json['templatename']
+		admin_group = Groups.query.filter_by(groupName=app.config['ADMIN_GROUP'], active = True).first()
+		template = Template(name=name, Groups=[admin_group])
+		db.session.add(template)
+		try:
+			db.session.commit()
+			return "SUCCESS", 201
+		except IntegrityError:
+			db.session.rollback()
+		return "Integrity Error: Duplicate Template", 409
+	else:
+		abort(401)
+
 @app.route('/api/v1.0/joinGroup', methods=['POST'])
 @auth.login_required
 def api_join_group():
@@ -153,8 +175,6 @@ def api_get_templates():
 	for template in templates:
 		templates_json.append(template.get_json())
 	return jsonify(response = templates_json)
-
-
 
 
 
