@@ -15,7 +15,11 @@
 <body>
 
 <script>
-var name = '{{ name }}';
+    var name = '{{ name }}';
+    {% if user %}
+        var username = '{{user.username}}'
+        var apikey   = '{{apikey}}'
+    {% endif %}
 </script>
 
 <div>
@@ -24,7 +28,7 @@ var name = '{{ name }}';
 			<div class="container global-header">
 				<img id="header-logo" src="./static/img/anylytics.png"/><h2>Dash</h2>
 				{% if g.user.is_authenticated() %}
-					<div class="pull-right header-info sourceSans white">
+					<div class="pull-right header-info sourceSans white uppercase">
 						{% if user %}
 							Welcome, {{user.username}}
 						{% endif %}

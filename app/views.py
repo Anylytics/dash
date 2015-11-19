@@ -56,6 +56,7 @@ def login():
 	form = LoginForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(username=form.userid.data, active = True).first()
+		session['pw'] = form.password.data
 		if user is None:
 			flash('Username or Password is invalid' , 'error')
 		else:
@@ -65,7 +66,7 @@ def login():
 				db.session.add(action)
 				db.session.commit()
 				login_user(user, remember=True)
-				return redirect(url_for("home_page"))
+				return redirect(url_for("reports_page"))
 	return render_template('login.html', name='login',form=form)
 
 
@@ -95,10 +96,11 @@ def home_page():
 @login_required
 def reports_page():
 	user=g.user
+	apikey=session['pw']
 	action = Action(action = "Checked reports", timestamp = datetime.utcnow(),user = user)
 	db.session.add(action)
 	db.session.commit()
-	return render_template('reports.html', name='reports', user=user)
+	return render_template('reports.html', name='reports', user=user, apikey=apikey)
 
 @app.route('/admin-upload', methods=['GET', 'POST'])
 @g_login_required(group=app.config['ADMIN_GROUP'])
@@ -143,12 +145,10 @@ def admin_upload_page():
 
 
 @app.route('/user-admin', methods=['GET', 'POST'])
-@g_login_required(group="Admin")
+@g_login_required(group=app.config['ADMIN_GROUP'])
 def user_admin_page():
 	user=g.user
-	form = CreateUserForm()
-	templates = set()
-	return render_template('user-admin.html', name='user-admin', user=user, templates=list(templates), form=form)
+	return render_template('user-admin.html', name='user-admin', user=user)
 
 @app.route('/settings')
 @login_required

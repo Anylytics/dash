@@ -1,92 +1,13 @@
 {% extends "template.html" %}
-{% import 'form-macro.html' as macros %}
 {% block title %}User Administration{% endblock %}
 
 {% block main_content %}
 <!--Define 2 column layout here-->
 <div class="container">
-	<h2 class="admin-section">User Management</h2>
-	<div class="row">
-		<div class="col-sm-6">
-			<div class="dash-widget">
-				<div class="dash-widget-header">
-					<h4><i class="glyphicon glyphicon-plus"></i>Create User</h4>
-				</div>
-				<div class="dash-widget-content">
-					<!-- TODO Develop Form for creating a user -->
-					{% call macros.render_form(form, action_url='', action_text='Create User',
-												class_='') %}
-						{{ macros.render_field(form.name, label_visible=true, placeholder='Display Name', type='text') }}
-						{{ macros.render_field(form.username, label_visible=true, placeholder='User Name', type='text') }}
-						{{ macros.render_field(form.password, label_visible=true, placeholder='Password', type='password') }}
-					{% endcall %}
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-6">
-			<div class="dash-widget">
-				<div class="dash-widget-header">
-					<h4><i class="glyphicon glyphicon-edit"></i>Update User</h4>
-				</div>
-				<div class="dash-widget-content">
-					<!-- TODO Develop Form for creating a user -->
-					Select A User
-					<select class="form-control" id="filterBox">
-				  		<option value="gsubram4">Gokul</option>
-				  		<option value="enayetn">Nabil</option>
-				  		<option value="theraj">Nitin</option>
-					</select>
-				</div>
-			</div>
-		</div>
-	</div>
-	<hr/>
-	<h2 class="admin-section">Group Management</h2>
-	<div class="row">
-		<div class="col-sm-6">
-			<div class="dash-widget">
-				<div class="dash-widget-header">
-					<h4><i class="glyphicon glyphicon-plus"></i>Create Group</h4>
-				</div>
-				<div class="dash-widget-content">
-					<!-- TODO Develop Form for creating a user -->
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-6">
-			<div class="dash-widget">
-				<div class="dash-widget-header">
-					<h4><i class="glyphicon glyphicon-edit"></i>Update Group</h4>
-				</div>
-				<div class="dash-widget-content">
-					<!-- TODO Develop Form for creating a user -->
-				</div>
-			</div>
-		</div>
-	</div>
-	<hr/>
-	<h2 class="admin-section">Template Management</h2>
-	<div class="row">
-		<div class="col-sm-6">
-			<div class="dash-widget">
-				<div class="dash-widget-header">
-					<h4><i class="glyphicon glyphicon-plus"></i>Create Template</h4>
-				</div>
-				<div class="dash-widget-content">
-					<!-- TODO Develop Form for creating a user -->
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-6">
-			<div class="dash-widget">
-				<div class="dash-widget-header">
-					<h4><i class="glyphicon glyphicon-edit"></i>Update Template</h4>
-				</div>
-				<div class="dash-widget-content">
-					<!-- TODO Develop Form for creating a user -->
-				</div>
-			</div>
-		</div>
+	<div id="userAdmin">
 	</div>
 </div>
+<script>
+	require(["useradmin"]);
+</script>
 {% endblock %}

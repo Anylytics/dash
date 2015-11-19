@@ -10,6 +10,8 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
       el: 'tableHistoryThree',
       data: {
       	"response": {},
+      	"thisLoading":false,
+      	"templates": {},
       	"file_id": {},
       	"filename": {},
       	"currentFilter": "",
@@ -144,68 +146,95 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
     template: html
     });
 
-	//tableHistoryThree.set("current.rows", tableHistoryThree.get("response[0].summary"))
+	function toggleLoading() {
+		tableHistoryThree.set("thisLoading",!tableHistoryThree.get("thisLoading"));
+	}
+	
 	$.ajax({
-	  type: "POST",
-	  url: "./api/v1.0/getData",
+	  type: "GET",
+	  url: "./api/v1.0/getTemplates",
 	  contentType : 'application/json',
 	  dataType: "json",
-	  data: JSON.stringify({"template": "Summary", "rows": 1}),
+	  beforeSend: function (xhr) {
+			xhr.setRequestHeader ("Authorization", "Basic " + btoa(username + ":" + apikey));
+	  },
 	  success: function(json) {
-	  	var rawData = json.response[0];
-	  	var file_id = json.response[1];
-	  	var filename = json.response[2];
-	  	for (objects in rawData) {
-	  		if (rawData[objects].name==null) {
-	  			rawData[objects].name="dataObj"+objects;
-	  		}
-	  		if (rawData[objects].width==null) {
-	  			rawData[objects].width=6;
-	  		}
-	  		if (rawData[objects].type==null) {
-	  			rawData[objects].type="table";
-	  		}
-	  	}
-	  	console.log(rawData);
-	  	console.log(file_id);
-	  	console.log(filename)
-	  	tableHistoryThree.set("response", rawData);
-	  	tableHistoryThree.set("file_id",file_id);
-	  	tableHistoryThree.set("filename", filename);
-	  	var responseObj = tableHistoryThree.get("response");
-	  	for (objects in responseObj) {
-	  		if (responseObj[objects].type=="line-graph") {
-	  			dashLineCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name);
-	  		}
-	  		if (responseObj[objects].type=="table") {
-	  			var headersVar = buildHeaderArray(responseObj[objects].headers);
-				var dataVar = buildRowArray(responseObj[objects].rows,headersVar);
+	  	console.log(JSON.stringify(json));
+	  	tableHistoryThree.set("templates",json.response);
+  		hideAnimation("loading-screen");
+	  }
+	});
 
-			    $('#'+responseObj[objects].name).DataTable({
-			    	"columns":headersVar,
-			    	"data":dataVar,
+	function getReportData(templateName) {
+		toggleLoading();
+		$.ajax({
+		  type: "POST",
+		  url: "./api/v1.0/getData",
+		  contentType : 'application/json',
+		  dataType: "json",
+		  data: JSON.stringify({"template": "Summary", "rows": 1}),
+		  success: function(json) {
+		  	var rawData = json.response[0];
+		  	var file_id = json.response[1];
+		  	var filename = json.response[2];
+		  	for (objects in rawData) {
+		  		if (rawData[objects].name==null) {
+		  			rawData[objects].name="dataObj"+objects;
+		  		}
+		  		if (rawData[objects].width==null) {
+		  			rawData[objects].width=6;
+		  		}
+		  		if (rawData[objects].type==null) {
+		  			rawData[objects].type="table";
+		  		}
+		  	}
+		  	console.log(rawData);
+		  	//console.log(file_id);
+		  	//console.log(filename)
+		  	tableHistoryThree.set("response", rawData);
+		  	tableHistoryThree.set("file_id",file_id);
+		  	tableHistoryThree.set("filename", filename);
+		  	var responseObj = tableHistoryThree.get("response");
+		  	for (objects in responseObj) {
+		  		if (responseObj[objects].type=="line-graph") {
+		  			dashLineCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name);
+		  		}
+		  		if (responseObj[objects].type=="table") {
+		  			var headersVar = buildHeaderArray(responseObj[objects].headers);
+					var dataVar = buildRowArray(responseObj[objects].rows,headersVar);
+
+				    $('#'+responseObj[objects].name).DataTable({
+				    	"columns":headersVar,
+				    	"data":dataVar,
+				    	"paging":false,
+				    	"info":false
+				    });
+		  		}
+
+		  	}
+		  	/*for (var i =0; i<json["response"].length; i++)
+		  	{
+		  		//tableHistoryThree.set("aggregate.columns."+json["response"][i]["date"], json["response"][i]["aggregate"]);
+		  	}*/
+			toggleLoading();
+			//dashLineCharts.buildChart(tableHistoryThree.get("response[2]"),'#numberStoresBreakdown');
+			tableHistoryThree.set("currentFilter",tableHistoryThree.get("response[5].city[0].name"));
+			$(document).ready(function(){
+			    $('#response-3').DataTable({
 			    	"paging":false,
 			    	"info":false
 			    });
-	  		}
+			});
 
-	  	}
-	  	/*for (var i =0; i<json["response"].length; i++)
-	  	{
-	  		//tableHistoryThree.set("aggregate.columns."+json["response"][i]["date"], json["response"][i]["aggregate"]);
-	  	}*/
-	  	hideAnimation("loading-screen");
-		//dashLineCharts.buildChart(tableHistoryThree.get("response[2]"),'#numberStoresBreakdown');
-		tableHistoryThree.set("currentFilter",tableHistoryThree.get("response[5].city[0].name"));
-		$(document).ready(function(){
-		    $('#response-3').DataTable({
-		    	"paging":false,
-		    	"info":false
-		    });
+		  }
 		});
+	}
 
-	  }
+
+	$("#templateBox").change(function() {
+		getReportData($("#templateBox").val());
 	});
+
 
 	tableHistoryThree.on( 'changeFocus', function( event, object )  {
 		var response = tableHistoryThree.get("response");
@@ -218,9 +247,11 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 		}
 	});
 
+	/*
 	$("#filterBox").change(function() {
 		tableHistoryThree.set("currentFilter",$("#filterBox").val());
 	});
+	*/
 
     return tableHistoryThree;
 
