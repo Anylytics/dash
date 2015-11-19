@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug import secure_filename
 import os
 import time
+import api
 
 def allowed_file(filename):
 	return '.' in filename and \
@@ -96,6 +97,7 @@ def home_page():
 @login_required
 def reports_page():
 	user=g.user
+	admin = isadmin(user)
 	apikey=session['pw']
 	action = Action(action = "Checked reports", timestamp = datetime.utcnow(),user = user)
 	db.session.add(action)
