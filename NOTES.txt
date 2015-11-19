@@ -35,7 +35,6 @@ curl -i -u User:Pass -H "Content-Type: application/json" -X POST -d '{"username"
 ######################
 
 
-
 /api/v1.0/createGroup - POST [ADMIN ONLY]
 	groupname
 

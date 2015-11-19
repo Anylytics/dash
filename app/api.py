@@ -147,14 +147,12 @@ def api_get_user():
 @auth.login_required
 def api_get_templates():
 	user = g.user
-	if isadmin(user):
-		templates_json = []
-		templates = Template.query.filter_by(active = True).all()
-		for template in templates:
-			templates_json.append(template.get_json())
-		return jsonify(response = templates_json)
-	else:
-		abort(401)
+	groups = [group.id for group in user.groups]
+	templates_json = []
+	templates = Template.query.filter(Template.Groups.any(Groups.id.in_(groups))).all()
+	for template in templates:
+		templates_json.append(template.get_json())
+	return jsonify(response = templates_json)
 
 
 
