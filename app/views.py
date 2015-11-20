@@ -53,7 +53,7 @@ def g_login_required(group="ANY"):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if g.user is not None and g.user.is_authenticated():
-		return redirect(url_for('home_page'))
+		return redirect(url_for('reports_page'))
 	form = LoginForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(username=form.userid.data, active = True).first()
@@ -97,7 +97,6 @@ def home_page():
 @login_required
 def reports_page():
 	user=g.user
-	admin = isadmin(user)
 	apikey=session['pw']
 	action = Action(action = "Checked reports", timestamp = datetime.utcnow(),user = user)
 	db.session.add(action)
@@ -150,7 +149,8 @@ def admin_upload_page():
 @g_login_required(group=app.config['ADMIN_GROUP'])
 def user_admin_page():
 	user=g.user
-	return render_template('user-admin.html', name='user-admin', user=user)
+	apikey=session['pw']
+	return render_template('user-admin.html', name='user-admin', user=user, apikey=apikey)
 
 @app.route('/settings')
 @login_required

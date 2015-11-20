@@ -1,20 +1,213 @@
-
+{{#if thisLoading}}
+	<div class="progress">
+		<div class="indeterminate"></div>
+	</div>
+{{/if}}
+<h6>Please view the browser console for any errors</h6>
+<h3>User Management</h3>
 <div class="row">
 	<div class="col-sm-6">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-pencil"></i>Edit User</h4>
+				<h4>
+					<i class="glyphicon glyphicon-plus"></i>
+					Create User
+				</h4>
 			</div>
 			<div class="dash-widget-content">
+				<div class="form-group">
+					<label for="createusername">Username</label>
+					<input type="username" class="form-control" id="createusername" placeholder="Username" value="{{userCreationObject.username}}">
+				</div>
+				<div class="form-group">
+					<label for="createemail">Email</label>
+					<input type="email" class="form-control" id="createusername" placeholder="Email" value="{{userCreationObject.email}}">
+				</div>
+				<div class="form-group">
+					<label for="createpassword">Password</label>
+					<input type="text" class="form-control" id="createpassword" placeholder="Password" value="{{userCreationObject.password}}">
+				</div>
+				<button class="btn btn-default" on-click="createUser">Submit</button>
 			</div>
 		</div>
 	</div>
 	<div class="col-sm-6">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-plus"></i>Create User</h4>
+				<h4>
+					<i class="glyphicon glyphicon-pencil"></i>
+					Add User To Group
+				</h4>
 			</div>
 			<div class="dash-widget-content">
+				<select class="form-control" value="{{user2groupObject.username}}">
+					<option disabled>Pick a user...</option>
+					{{#each users}}
+						<option value="{{this.username}}">{{this.username}}</option>
+					{{/each}}
+				</select>
+				<select class="form-control" value="{{user2groupObject.groupname}}">
+					<option disabled>Pick a group...</option>
+					{{#each groups}}
+						<option value="{{this.groupname}}">{{this.groupname}}</option>
+					{{/each}}
+				</select>
+				<button class="btn btn-default" on-click="addUserToGroup">Submit</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-12">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4>
+					<i class="glyphicon glyphicon-user"></i>
+					Users
+					<i class="glyphicon glyphicon-refresh pull-right" on-click="getUsers"></i>
+				</h4>
+			</div>
+			<div class="dash-widget-content">
+				<table>
+				<thead>
+					<tr>
+						<th>Username</th>
+						<th>Email</th>
+						<th>Groups</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each users}}
+						<tr>
+							<td>{{this.username}}</td>
+							<td>{{this.email}}</td>
+							<td>{{this.groups}}</td>
+						</tr>
+					{{/each}}
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<hr/>
+<h3>Group Management</h3>
+<div class="row">
+	<div class="col-sm-4">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4>
+					<i class="glyphicon glyphicon-plus"></i>
+					Create Group
+				</h4>
+			</div>
+			<div class="dash-widget-content">
+				<div class="form-group">
+					<label for="creategroupname">Group Name</label>
+					<input type="text" class="form-control" id="creategroupname" placeholder="Group Name" value="{{groupCreationObject.groupname}}">
+				</div>
+				<button class="btn btn-default" on-click="createGroup">Submit</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4>
+					<i class="glyphicon glyphicon-pencil"></i>
+					Add Group To Template
+				</h4>
+			</div>
+			<div class="dash-widget-content">
+
+				<select class="form-control" value="{{group2templateObject.groupname}}">
+					<option disabled>Pick a group...</option>
+					{{#each groups}}
+						<option value="{{this.groupname}}">{{this.groupname}}</option>
+					{{/each}}
+				</select>
+				<select class="form-control" value="{{group2templateObject.templatename}}">
+					<option disabled>Pick a template...</option>
+					{{#each templates}}
+						<option value="{{this.name}}">{{this.name}}</option>
+					{{/each}}
+				</select>
+				<button class="btn btn-default" on-click="addGrouptoTemplate">Submit</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4>
+					<i class="glyphicon glyphicon-user"></i>
+					Groups
+					<i class="glyphicon glyphicon-refresh pull-right" on-click="getGroups"></i>
+				</h4>
+			</div>
+			<div class="dash-widget-content">
+				<table>
+				<thead>
+					<tr>
+						<th>Group Name</th>
+						<th>Templates</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each groups}}
+						<tr>
+							<td>{{this.groupname}}</td>
+							<td>{{this.templates}}</td>
+						</tr>
+					{{/each}}
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<hr/>
+<h3>Template Management</h3>
+<div class="row">
+	<div class="col-sm-6">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4>
+					<i class="glyphicon glyphicon-plus"></i>
+					Create Template
+				</h4>
+			</div>
+			<div class="dash-widget-content">
+				<div class="form-group">
+					<label for="createtemplatename">Template Name</label>
+					<input type="text" class="form-control" id="createtemplatename" placeholder="Template Name" value="{{templateCreationObject.templatename}}">
+				</div>
+				<button class="btn btn-default" on-click="createTemplate">Submit</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="dash-widget">
+			<div class="dash-widget-header">
+				<h4>
+					<i class="glyphicon glyphicon-list-alt"></i>
+					Templates
+					<i class="glyphicon glyphicon-refresh pull-right" on-click="getTemplates"></i>
+				</h4>
+			</div>
+			<div class="dash-widget-content">
+				<table class="table">
+				<thead>
+					<tr>
+						<th>Template Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each templates}}
+						<tr>
+							<td>{{this.name}}</td>
+						</tr>
+					{{/each}}
+				</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
