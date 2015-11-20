@@ -72,7 +72,6 @@ def login():
 
 
 @app.route('/index')
-@app.route('/')
 @login_required
 def home_page():
 	user=g.user
@@ -94,20 +93,24 @@ def home_page():
 
 
 @app.route('/reports')
+@app.route('/')
 @login_required
 def reports_page():
 	user=g.user
+	userIsAdmin = api.isadmin(user)
 	apikey=session['pw']
 	action = Action(action = "Checked reports", timestamp = datetime.utcnow(),user = user)
 	db.session.add(action)
 	db.session.commit()
-	return render_template('reports.html', name='reports', user=user, apikey=apikey)
+	return render_template('reports.html', name='reports', user=user, apikey=apikey, isadmin=userIsAdmin)
 
 @app.route('/admin-upload', methods=['GET', 'POST'])
 @g_login_required(group=app.config['ADMIN_GROUP'])
 def admin_upload_page():
 	user=g.user
+	userIsAdmin = api.isadmin(user)
 	form = UploadForm()
+	apikey=session['pw']
 	templates = set()
 
 	for group in user.groups:
@@ -142,15 +145,16 @@ def admin_upload_page():
 		action = Action(action = "Accessed Admin Upload Panel", timestamp = datetime.utcnow(), user = user)
 		db.session.add(action)
 		db.session.commit()
-	return render_template('admin-upload.html', name='admin', user=user, templates=list(templates), form=form)
+	return render_template('admin-upload.html', name='admin', user=user, templates=list(templates), form=form, apikey=apikey, isadmin = userIsAdmin)
 
 
 @app.route('/user-admin', methods=['GET', 'POST'])
 @g_login_required(group=app.config['ADMIN_GROUP'])
 def user_admin_page():
 	user=g.user
+	userIsAdmin = api.isadmin(user)
 	apikey=session['pw']
-	return render_template('user-admin.html', name='user-admin', user=user, apikey=apikey)
+	return render_template('user-admin.html', name='user-admin', user=user, apikey=apikey, isadmin = userIsAdmin)
 
 @app.route('/settings')
 @login_required

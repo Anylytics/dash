@@ -17,8 +17,9 @@
 <script>
     var name = '{{ name }}';
     {% if user %}
-        var username = '{{user.username}}'
-        var apikey   = '{{apikey}}'
+        var username = '{{user.username}}';
+        var apikey   = '{{apikey}}';
+        var isadmin = '{{isadmin}}';
     {% endif %}
 </script>
 

@@ -3,6 +3,13 @@
 		<div class="indeterminate"></div>
 	</div>
 {{/if}}
+{{#if errorMessage}}
+<div class="alert alert-danger" role="alert">
+	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	<span class="sr-only">Error:</span>
+	{{errorMessage}}
+</div>
+{{/if}}
 <h6>Please view the browser console for any errors</h6>
 <h3>User Management</h3>
 <div class="row">
@@ -41,13 +48,13 @@
 			</div>
 			<div class="dash-widget-content">
 				<select class="form-control" value="{{user2groupObject.username}}">
-					<option disabled>Pick a user...</option>
+					<option value="" disabled>Pick a user...</option>
 					{{#each users}}
 						<option value="{{this.username}}">{{this.username}}</option>
 					{{/each}}
 				</select>
 				<select class="form-control" value="{{user2groupObject.groupname}}">
-					<option disabled>Pick a group...</option>
+					<option value="" disabled>Pick a group...</option>
 					{{#each groups}}
 						<option value="{{this.groupname}}">{{this.groupname}}</option>
 					{{/each}}
@@ -62,7 +69,7 @@
 				<h4>
 					<i class="glyphicon glyphicon-user"></i>
 					Users
-					<i class="glyphicon glyphicon-refresh pull-right" on-click="getUsers"></i>
+					<button class="pull-right"><i class="glyphicon glyphicon-refresh" on-click="getUsers"></i></button>
 				</h4>
 			</div>
 			<div class="dash-widget-content">
@@ -91,7 +98,7 @@
 <hr/>
 <h3>Group Management</h3>
 <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
 				<h4>
@@ -108,7 +115,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
 				<h4>
@@ -119,13 +126,13 @@
 			<div class="dash-widget-content">
 
 				<select class="form-control" value="{{group2templateObject.groupname}}">
-					<option disabled>Pick a group...</option>
+					<option value="" disabled>Pick a group...</option>
 					{{#each groups}}
 						<option value="{{this.groupname}}">{{this.groupname}}</option>
 					{{/each}}
 				</select>
 				<select class="form-control" value="{{group2templateObject.templatename}}">
-					<option disabled>Pick a template...</option>
+					<option value="" disabled>Pick a template...</option>
 					{{#each templates}}
 						<option value="{{this.name}}">{{this.name}}</option>
 					{{/each}}
@@ -134,13 +141,13 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-6">
 		<div class="dash-widget">
 			<div class="dash-widget-header">
 				<h4>
 					<i class="glyphicon glyphicon-user"></i>
 					Groups
-					<i class="glyphicon glyphicon-refresh pull-right" on-click="getGroups"></i>
+					<button class="pull-right"><i class="glyphicon glyphicon-refresh pull-right" on-click="getGroups"></i></button>
 				</h4>
 			</div>
 			<div class="dash-widget-content">
@@ -190,7 +197,7 @@
 				<h4>
 					<i class="glyphicon glyphicon-list-alt"></i>
 					Templates
-					<i class="glyphicon glyphicon-refresh pull-right" on-click="getTemplates"></i>
+					<button class="pull-right"><i class="glyphicon glyphicon-refresh pull-right" on-click="getTemplates"></i></button>
 				</h4>
 			</div>
 			<div class="dash-widget-content">

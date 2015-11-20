@@ -5,6 +5,7 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
     var userAdmin = new Ractive({
       el: 'userAdmin',
       data: {
+      	"errorMessage":"",
       	"thisLoading":true,
       	"users":{},
       	"userCreationObject": {
@@ -141,7 +142,13 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 				xhr.setRequestHeader ("Authorization", "Basic " + btoa(username + ":" + apikey));
 			},
 			success: function(json) {
+				console.log(json);
 				return json;
+			},
+			error: function(xhr, status, error) {
+				if (status=="error") {
+					userAdmin.set("errorMessage",error);
+				}
 			}
 		});
 	}
@@ -151,7 +158,12 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 	_getStuff('getTemplates','templates');
 
 	function toggleLoading( setTo ) {
-		userAdmin.set("thisLoading", setTo);
+		userAdmin.set("errorMessage","");
+		if (setTo) {
+			userAdmin.set("thisLoading", setTo);
+		} else {
+			setTimeout(function(){ userAdmin.set("thisLoading", setTo); }, 1000);
+		}
 	}
 
 
