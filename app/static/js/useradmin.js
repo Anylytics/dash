@@ -52,6 +52,14 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 			_getStuff('getUsers','users');
 			toggleLoading(false);
 		},
+		deleteUser: function ( event ) {
+			toggleLoading(true);
+			var userKeypath = event.keypath;
+			var thisUser = userAdmin.get(userKeypath);
+			_runAPI('POST','deleteUser',thisUser);
+			_getStuff('getUsers','users');
+			toggleLoading(false);
+		},
 		getGroups: function ( event ) {
 			toggleLoading(true);
 			_getStuff('getGroups','groups');
@@ -67,7 +75,15 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 			userAdmin.set("groupCreationObject",blankGroupObj);
 			_getStuff('getGroups','groups');
 			toggleLoading(false);
-
+		},
+		deleteGroup: function ( event ) {
+			toggleLoading(true);
+			var groupKeypath = event.keypath;
+			var thisGroup = userAdmin.get(groupKeypath);
+			_runAPI('POST','deleteGroup',thisGroup);
+			_getStuff('getGroups','groups');
+			_getStuff('getUsers','users');
+			toggleLoading(false);
 		},
 		getTemplates: function ( event ) {
 			toggleLoading(true);
@@ -82,6 +98,16 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 			};
 			_runAPI('POST','createTemplate',templateObj);
 			userAdmin.set("templateCreationObject",blankTemplateObj);
+			_getStuff('getTemplates','templates');
+			toggleLoading(false);
+		},
+		deleteTemplate: function ( event ) {
+			toggleLoading(true);
+			var templateKeypath = event.keypath;
+			var thisTemplate = userAdmin.get(templateKeypath);
+			console.log(thisTemplate);
+			_runAPI('POST','deleteTemplate',thisTemplate);
+			_getStuff('getGroups','groups');
 			_getStuff('getTemplates','templates');
 			toggleLoading(false);
 		},

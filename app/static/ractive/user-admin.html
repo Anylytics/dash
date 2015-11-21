@@ -1,4 +1,5 @@
 {{#if thisLoading}}
+	<div class="overlay"></div>
 	<div class="progress">
 		<div class="indeterminate"></div>
 	</div>
@@ -79,6 +80,7 @@
 						<th>Username</th>
 						<th>Email</th>
 						<th>Groups</th>
+						<th>DELETE</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -87,6 +89,7 @@
 							<td>{{this.username}}</td>
 							<td>{{this.email}}</td>
 							<td>{{this.groups}}</td>
+							<td><button class="btn btn-danger" on-click="deleteUser"><i class="glyphicon glyphicon-remove"></i></button></td>
 						</tr>
 					{{/each}}
 				</tbody>
@@ -156,6 +159,7 @@
 					<tr>
 						<th>Group Name</th>
 						<th>Templates</th>
+						<th>DELETE</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -163,6 +167,7 @@
 						<tr>
 							<td>{{this.groupname}}</td>
 							<td>{{this.templates}}</td>
+							<td><button class="btn btn-danger" on-click="deleteGroup"><i class="glyphicon glyphicon-remove"></i></button></td>
 						</tr>
 					{{/each}}
 				</tbody>
@@ -205,12 +210,14 @@
 				<thead>
 					<tr>
 						<th>Template Name</th>
+						<th>DELETE</th>
 					</tr>
 				</thead>
 				<tbody>
 					{{#each templates}}
 						<tr>
 							<td>{{this.name}}</td>
+							<td><button class="btn btn-danger" on-click="deleteTemplate"><i class="glyphicon glyphicon-remove"></i></button></td>
 						</tr>
 					{{/each}}
 				</tbody>

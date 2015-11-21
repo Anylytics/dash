@@ -20,6 +20,18 @@ Date: 		6/8/2015;
 	position:relative;
 }
 
+.overlay {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: black;
+    opacity: .5;
+    display: inline;
+}
+
 /*********[Global Header Styling]*********/
 body {
 }

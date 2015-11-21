@@ -142,9 +142,9 @@ def api_delete_template():
 	if isadmin(user):
 		if not request.json:
 			abort(400)
-		if 'templatename' not in request.json:
+		if 'name' not in request.json:
 			abort(400)
-		templatename = request.json['templatename']
+		templatename = request.json['name']
 		output = Template.query.filter_by(name=templatename).delete()
 		db.session.commit()
 		if output > 0:
