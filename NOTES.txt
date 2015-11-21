@@ -57,4 +57,12 @@ curl -i -u User:Pass -H "Content-Type: application/json" -X POST -d '{"username"
 
 /api/v1.0/getTemplates - GET
 
+/api/v1.0/deleteUser - POST [ADMIN ONLY]
+	username
+
+/api/v1.0/deleteGroup - POST [ADMIN ONLY]
+	groupname
+
+/api/v1.0/deleteTemplate - POST [ADMIN ONLY]
+	templatename
 
