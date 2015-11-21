@@ -44,6 +44,25 @@ def create_group(groupname):
 		db.session.rollback()
 		return "Integrity Error: Duplicate Group", 409
 
+@app.route('/api/v1.0/deleteGroup', methods=['POST'])
+@auth.login_required
+def api_delete_group():
+	user = g.user
+	if isadmin(user):
+		if not request.json:
+			abort(400)
+		if 'groupname' not in request.json:
+			abort(400)
+		groupname = request.json['groupname']
+		output = Groups.query.filter_by(groupName = groupname).delete()
+		db.session.commit()
+		if output > 0:
+			return "SUCCESS", 200
+		else:
+			return "Group Not Found", 404
+	else:
+		abort(400)
+
 
 @app.route('/api/v1.0/createUser', methods=['POST'])
 @auth.login_required
@@ -73,6 +92,27 @@ def create_user(username, email, password):
 		db.session.rollback()
 		return "Integrity Error: Duplicate User", 409
 
+@app.route('/api/v1.0/deleteUser', methods=['POST'])
+@auth.login_required
+def api_delete_user():
+	user = g.user
+	if isadmin(user):
+		if not request.json:
+			abort(400)
+		if 'username' not in request.json:
+			abort(400)
+		username = request.json['username']
+		output = User.query.filter_by(username=username).delete()
+		db.session.commit()
+		if output > 0:
+			return "SUCCESS", 200
+		else:
+			return "User Not Found", 404
+	else:
+		abort(400)
+
+
+
 @app.route('/api/v1.0/createTemplate', methods=['POST'])
 @auth.login_required
 def api_create_template():
@@ -95,6 +135,25 @@ def api_create_template():
 	else:
 		abort(401)
 
+@app.route('/api/v1.0/deleteTemplate', methods=['POST'])
+@auth.login_required
+def api_delete_template():
+	user = g.user
+	if isadmin(user):
+		if not request.json:
+			abort(400)
+		if 'templatename' not in request.json:
+			abort(400)
+		templatename = request.json['templatename']
+		output = Template.query.filter_by(name=templatename).delete()
+		db.session.commit()
+		if output > 0:
+			return "SUCCESS", 200
+		else:
+			return "Template Not Found", 404
+	else:
+		abort(400)
+
 @app.route('/api/v1.0/joinGroup', methods=['POST'])
 @auth.login_required
 def api_join_group():
@@ -116,6 +175,7 @@ def api_join_group():
 		return "SUCCESS", 200
 	else:
 		abort(401)
+
 
 @app.route('/api/v1.0/associateTemplate', methods=['POST'])
 @auth.login_required
