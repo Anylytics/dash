@@ -42,20 +42,22 @@
 		</div>
 	</div><!--End col-sm-6-->
 	{{#if response}}
-	<div class="col-sm-6">
-		<div class="dash-widget">
-			<div class="dash-widget-header">
-				<h4><i class="glyphicon glyphicon-tasks"></i>Download Report</h4>
+	{{#if file_id}}
+		<div class="col-sm-6">
+			<div class="dash-widget">
+				<div class="dash-widget-header">
+					<h4><i class="glyphicon glyphicon-tasks"></i>Download Report</h4>
+				</div>
+				<div class="dash-widget-content">
+					<button type="button" class="btn btn-default">
+						<a download="{{filename}}" href="./api/v1.0/getupload/{{file_id}}">
+						<i  class="glyphicon glyphicon-download pad-right" aria-hidden="true"></i><span>Download</span>
+						</a>
+					</button>
+				</div><!--End Content-->
 			</div>
-			<div class="dash-widget-content">
-				<button type="button" class="btn btn-default">
-					<a download="{{filename}}" href="./api/v1.0/getupload/{{file_id}}">
-					<i  class="glyphicon glyphicon-download pad-right" aria-hidden="true"></i><span>Download</span>
-					</a>
-				</button>
-			</div><!--End Content-->
-		</div>
-	</div><!--End col-sm-6-->
+		</div><!--End col-sm-6-->
+	{{/if}}
 	{{/if}}
 </div>
 <div class="row">
