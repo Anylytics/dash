@@ -132,9 +132,9 @@ def admin_upload_page():
 			file_selected = File.query.filter_by(id=file_id).first()
 			template = Template.query.filter_by(id=template_id, active=True).first()
 			if template is None:
-				flash('Could not find template' , 'success')
-			elif file_selected is None:
-				flash('Could not find associated file', 'success')
+				flash('Could not find template')
+			#elif file_selected is None:
+			#	flash('Could not find associated file')
 			else:
 				data = Data(data = form.data.data, template = template, file_id = file_id)
 				db.session.add(data)
