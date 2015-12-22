@@ -1,7 +1,7 @@
 from flask.ext.wtf import Form
 from wtforms.widgets import TextArea, Select
 from wtforms import StringField, BooleanField, PasswordField, IntegerField, SelectField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 
 class LoginForm(Form):
 	userid = StringField('userid',validators=[DataRequired()])
@@ -10,7 +10,7 @@ class LoginForm(Form):
 
 class UploadForm(Form):
 	templateid = SelectField('templateid',coerce=int, validators=[DataRequired()])
-	fileid = IntegerField('fileid', [validators.optional()])
+	fileid = IntegerField('fileid', validators=[Optional()])
 	data =StringField('data', widget=TextArea(), validators=[DataRequired()])
 
 class CreateUserForm(Form):
