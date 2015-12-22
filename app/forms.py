@@ -10,7 +10,7 @@ class LoginForm(Form):
 
 class UploadForm(Form):
 	templateid = SelectField('templateid',coerce=int, validators=[DataRequired()])
-	fileid = IntegerField('fileid')
+	fileid = IntegerField('fileid', [validators.optional()])
 	data =StringField('data', widget=TextArea(), validators=[DataRequired()])
 
 class CreateUserForm(Form):
