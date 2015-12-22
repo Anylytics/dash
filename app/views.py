@@ -202,8 +202,8 @@ def upload_data_worker(user, template, data, file_id=None):
 	templates = set()
 	for group in user.groups:
 		#Get all the templates in this group
-		for template in group.Templates:
-			templates.add(template)
+		for tmp in group.Templates:
+			templates.add(tmp)
 	#Check if the selected template is in the set
 	if template not in templates:
 		return 401
