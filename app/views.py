@@ -75,6 +75,7 @@ def login():
 @login_required
 def home_page():
 	user=g.user
+	session.clear()
 	updates = [  # fake array of updates
 		{ 
 			'user': {'nickname': 'Nabil', 'initial':'N'}, 
@@ -98,6 +99,8 @@ def home_page():
 def reports_page():
 	user=g.user
 	userIsAdmin = api.isadmin(user)
+	if 'pw' not in session:
+		return redirect("/logout", code=302)
 	apikey=session['pw']
 	action = Action(action = "Checked reports", timestamp = datetime.utcnow(),user = user)
 	db.session.add(action)
@@ -110,6 +113,8 @@ def admin_upload_page():
 	user=g.user
 	userIsAdmin = api.isadmin(user)
 	form = UploadForm()
+	if 'pw' not in session:
+		return redirect("/logout", code=302)
 	apikey=session['pw']
 	templates = set()
 
@@ -153,6 +158,8 @@ def admin_upload_page():
 def user_admin_page():
 	user=g.user
 	userIsAdmin = api.isadmin(user)
+	if 'pw' not in session:
+		return redirect("/logout", code=302)
 	apikey=session['pw']
 	return render_template('user-admin.html', name='user-admin', user=user, apikey=apikey, isadmin = userIsAdmin)
 
