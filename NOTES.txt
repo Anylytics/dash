@@ -5,7 +5,7 @@
 1) Open Python in a terminal
 
 (anylyticsenv)> $ python                                           [±master ●●]
-Python 2.7.9 (default, Feb 10 2015, 03:28:08) 
+Python 2.7.9 (default, Feb 10 2015, 03:28:08)
 [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.56)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.
 
@@ -16,6 +16,10 @@ from app.models import *
 
 3) Go nuts
 
+TODOS:
+
+1. Add active check on all records ( .filter([model].active) )
+2. Update delete functions to be inactivate functions & reflect change on front end
 
 ######################
 #	      MISC       #
@@ -28,6 +32,10 @@ curl -i -H "Content-Type: application/json" -X POST -d '{"title":"Read a book"}'
 
 
 curl -i -u User:Pass -H "Content-Type: application/json" -X POST -d '{"username":"Test", "email":"Test", "password":"Test"}' localhost:3000/api/v1.0/createUser
+
+## POST Data to Template
+curl -i -u ser:Pass -H "Content-Type: application/json" -X POST -d '{"template":"test new template", "data":"[{\"headers\":[{\"label\":\"Text\",\"name\":\"text\"},{\"label\":\"Direction\",\"name\":\"direction\"},{\"label\":\"Percentage\",\"name\":\"percentage\"}],\"rows\":[{\"direction\":\"decreased\",\"percentage\":10,\"text\":\"PERFORMANCE DEGRADATION\"}],\"subheading\":\"Insights\",\"title\":\"Department Health Performance\",\"type\":\"summary\",\"name\":\"dataObj0\",\"width\":6},{\"headers\":[{\"label\":\"Text\",\"name\":\"text\"},{\"label\":\"Direction\",\"name\":\"direction\"},{\"label\":\"Percentage\",\"name\":\"percentage\"}],\"rows\":[{\"direction\":\"decreased\",\"percentage\":10,\"text\":\"PERFORMANCE DEGRADATION\"}],\"subheading\":\"Insights\",\"title\":\"Department Health Performance\",\"type\":\"summary\",\"name\":\"dataObj1\",\"width\":6}]", "file_id":null}' localhost:3000/api/v1.0/uploadData
+
 
 
 ######################
@@ -65,4 +73,3 @@ curl -i -u User:Pass -H "Content-Type: application/json" -X POST -d '{"username"
 
 /api/v1.0/deleteTemplate - POST [ADMIN ONLY]
 	templatename
-

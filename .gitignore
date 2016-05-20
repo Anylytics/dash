@@ -46,3 +46,4 @@ dash.db
 db_repository/
 
 *.pyc
+env
