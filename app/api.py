@@ -54,7 +54,8 @@ def api_delete_group():
 		if 'groupname' not in request.json:
 			abort(400)
 		groupname = request.json['groupname']
-		output = Groups.query.filter_by(groupName = groupname).delete()
+		output = Groups.query.filter_by(groupName = groupname).first()
+		db.session.delete(output)
 		db.session.commit()
 		if output > 0:
 			return "SUCCESS", 200
@@ -102,7 +103,9 @@ def api_delete_user():
 		if 'username' not in request.json:
 			abort(400)
 		username = request.json['username']
-		output = User.query.filter_by(username=username).delete()
+		output = User.query.filter_by(username=username).first()
+		print output
+		db.session.delete(output)
 		db.session.commit()
 		if output > 0:
 			return "SUCCESS", 200

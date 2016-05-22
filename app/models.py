@@ -19,6 +19,10 @@ class User(db.Model):
 	email = db.Column(db.String(120), index=True, unique=True)
 	active = db.Column(db.Boolean, default= True)
 	action = db.relationship('Action',backref='user',lazy='dynamic')
+	groups = db.relationship(
+        "Groups",
+        secondary = userGroup,
+        back_populates="users")
 	password = db.Column(db.String)
 
 	def is_authenticated(self):
@@ -55,7 +59,7 @@ class Groups(db.Model):
 	active = db.Column(db.Boolean, default = True)
 	users = db.relationship('User',
 							secondary = userGroup,
-							backref = 'groups')
+							back_populates = 'groups')
 	Templates = db.relationship('Template',
 								secondary = groupTemplate,
 								backref = 'groups')
