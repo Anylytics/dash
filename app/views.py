@@ -226,8 +226,11 @@ def upload_data_endpoint():
 	user = g.user
 	if not request.json or not 'template' in request.json or not 'data' in request.json:
 		abort(400)
+	file_id = None
+	if 'file_id' in request.json:
+		file_id = request.json['file_id']
 	template = Template.query.filter_by(name=request.json['template'], active = True).first()
-	retval = upload_data_worker(user=user,template=template, data=request.json['data'], file_id = request.json['file_id'])
+	retval = upload_data_worker(user=user,template=template, data=request.json['data'], file_id = file_id)
 	if retval is int:
 		abort(retval)
 	else:
