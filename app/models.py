@@ -62,7 +62,7 @@ class Groups(db.Model):
 							back_populates = 'groups')
 	Templates = db.relationship('Template',
 								secondary = groupTemplate,
-								backref = 'groups')
+								back_populates = 'Groups')
 	parent_id = db.Column(db.Integer,db.ForeignKey('groups.id'))
 	parent = db.relationship('Groups',lazy = True, backref = 'children', remote_side = [id])
 
@@ -89,7 +89,7 @@ class Template(db.Model):
 	data = db.relationship('Data',backref = 'template',lazy = 'dynamic')
 	Groups = db.relationship('Groups',
 							secondary = groupTemplate,
-							backref = 'template')
+							back_populates = 'Templates')
 
 	def get_json(self):
 		return {'name': self.name, 'filename': self.filename}

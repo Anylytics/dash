@@ -104,7 +104,6 @@ def api_delete_user():
 			abort(400)
 		username = request.json['username']
 		output = User.query.filter_by(username=username).first()
-		print output
 		db.session.delete(output)
 		db.session.commit()
 		if output > 0:
@@ -148,7 +147,8 @@ def api_delete_template():
 		if 'name' not in request.json:
 			abort(400)
 		templatename = request.json['name']
-		output = Template.query.filter_by(name=templatename).delete()
+		output = Template.query.filter_by(name=templatename).first()
+		db.session.delete(output)
 		db.session.commit()
 		if output > 0:
 			return "SUCCESS", 200
@@ -179,6 +179,27 @@ def api_join_group():
 	else:
 		abort(401)
 
+@app.route('/api/v1.0/leaveGroup', methods=['POST'])
+@auth.login_required
+def api_leave_group():
+	user = g.user
+	if isadmin(user):
+		if not request.json:
+			abort(400)
+		if 'username' not in request.json or 'groupname' not in request.json:
+			abort(400)
+		group = Groups.query.filter_by(groupName = request.json['groupname']).first()
+		user = User.query.filter_by(username = request.json['username']).first()
+		if group is None or user is None:
+			abort(400)
+		if user not in group.users:
+			abort(409)
+		group.users.remove(user)
+		db.session.commit()
+		return "SUCCESS", 200
+	else:
+		abort(401)
+
 
 @app.route('/api/v1.0/associateTemplate', methods=['POST'])
 @auth.login_required
@@ -199,6 +220,27 @@ def api_associate_template():
 		db.session.add(group)
 		db.session.commit()
 		return "SUCESSS", 200
+	else:
+		abort(401)
+
+@app.route('/api/v1.0/disassociateTemplate', methods=['POST'])
+@auth.login_required
+def api_disassociate_template():
+	user = g.user
+	if isadmin(user):
+		if not request.json:
+			abort(400)
+		if 'groupname' not in request.json or 'templatename' not in request.json:
+			abort(400)
+		group = Groups.query.filter_by(groupName = request.json['groupname']).first()
+		template = Template.query.filter_by(name = request.json['templatename']).first()
+		if group is None or template is None:
+			abort(400)
+		if template not in group.Templates:
+			abort(409)
+		group.Templates.remove(template)
+		db.session.commit()
+		return "SUCCESS", 200
 	else:
 		abort(401)
 
