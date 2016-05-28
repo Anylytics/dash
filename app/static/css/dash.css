@@ -431,6 +431,10 @@ h2.admin-section {
 	color:#54A148;
 }
 
+.btn-small {
+	padding:1px 2px;
+}
+
 
 /******** Indeterminate Loader ********/
 .progress {

@@ -280,6 +280,3 @@ def api_get_templates():
 	for template in templates:
 		templates_json.append(template.get_json())
 	return jsonify(response = templates_json)
-
-
-

@@ -62,10 +62,30 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 		},
     leaveGroup: function ( event ) {
       toggleLoading(true);
-			var userKeypath = event.keypath;
-			var thisUser = userAdmin.get(userKeypath);
-      console.log(event);
+			var groupKeypath = event.keypath;
+			var thisGroup = userAdmin.get(groupKeypath);
+      var keypathParsed = groupKeypath.split('.');
+      var userKeypath = keypathParsed[0]+'.'+keypathParsed[1];
+      var thisUser = userAdmin.get(userKeypath);
+      var dataToSend = {};
+      dataToSend.groupname = thisGroup;
+      dataToSend.username = thisUser.username;
+			_runAPI('POST','leaveGroup',dataToSend);
+			_getStuff('getUsers','users');
       toggleLoading(false);
+    },
+    disassociateTemplate: function ( event ) {
+      toggleLoading(true);
+			var templateKeypath = event.keypath;
+			var thisTemplate = userAdmin.get(templateKeypath);
+      var keypathParsed = templateKeypath.split('.');
+      var groupKeypath = keypathParsed[0]+'.'+keypathParsed[1];
+      var thisGroup = userAdmin.get(groupKeypath).groupname;
+      var dataToSend = {};
+      dataToSend.groupname = thisGroup;
+      dataToSend.templatename = thisTemplate;
+			_runAPI('POST','disassociateTemplate',dataToSend);
+			_getStuff('getGroups','groups');
     },
 		getGroups: function ( event ) {
 			toggleLoading(true);

@@ -92,7 +92,7 @@
 								{{#each this.groups}}
 									<span class="template-pill">
 										{{this}}
-										<button class="btn btn-danger" on-click="leaveGroup"><i class="glyphicon glyphicon-remove"></i></button>
+										<button class="btn btn-danger btn-small" on-click="leaveGroup"><i class="glyphicon glyphicon-remove"></i></button>
 									</span>
 								{{/each}}
 							</td>
@@ -178,6 +178,7 @@
 								{{#each this.templates}}
 									<span class="template-pill">
 										{{this}}
+										<button class="btn btn-danger btn-small" on-click="disassociateTemplate"><i class="glyphicon glyphicon-remove"></i></button>
 									</span>
 								{{/each}}
 							</td>
