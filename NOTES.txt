@@ -28,7 +28,7 @@ curl -i -u User:Pass http://localhost:3000/api/v1.0/getUsers
 
 curl -i -u User:Pass -X POST -F file=@payload.zip http://127.0.0.1:3000/api/v1.0/fileUpload
 
-curl -i -H "Content-Type: application/json" -X POST -d '{"title":"Read a book"}' localhost:3000/api/v1.0/createUser
+curl -i -u -H "Content-Type: application/json" -X POST -d '{"title":"Read a book"}' localhost:3000/api/v1.0/createUser
 
 
 curl -i -u User:Pass -H "Content-Type: application/json" -X POST -d '{"username":"Test", "email":"Test", "password":"Test"}' localhost:3000/api/v1.0/createUser
