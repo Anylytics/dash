@@ -4,6 +4,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	/*INITIALIZATIONS*/
 	Ractive.partials.loadingWidget = load;
 	var dashLineCharts = new dashCharts('line');
+	var dashPieCharts = new dashCharts('pie');
 
 
     var tableHistoryThree = new Ractive({
@@ -15,7 +16,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
       	"file_id": {},
       	"filename": {},
       	"currentFilter": "",
-      	"summary": 
+      	"summary":
       		{
       			title: "Summary",
       			subheading: "Summary Statistics",
@@ -32,7 +33,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	      						{"group":"","text":"Number of dead stores increased by 2%","direction":"increased","percentage":55}
 	      					]
       		},
-      	"numberStores": 
+      	"numberStores":
       		{
       			title: "Number of Stores",
       			subheading: "Trending number of stores (Three Months)",
@@ -54,7 +55,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	      						{"group":"All Stores","label":"07/31/2015","value":450}
 	      					]
       		},
-      	"numberStoresBreakdown": 
+      	"numberStoresBreakdown":
       		{
       			title: "Number of Stores By Health",
       			subheading: "Trending number of stores (Three Months)",
@@ -104,7 +105,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 
 	      					]
       		},
-      	"aggregate": 
+      	"aggregate":
 	      	{
 	      		title: "Historical Summary",
 	      		subheading: "Aggregate Store Performance",
@@ -121,7 +122,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	      						{"date":"06/21/2015","dead":2,"icu":5,"ok":17,"healthy":12}
 	      					]
 			},
-		"current": 
+		"current":
 			{
 				title: "Detailed Summary",
 				subheading: "Data for 07/25/2015",
@@ -149,7 +150,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	function toggleLoading() {
 		tableHistoryThree.set("thisLoading",!tableHistoryThree.get("thisLoading"));
 	}
-	
+
 	$.ajax({
 	  type: "GET",
 	  url: "./api/v1.0/getTemplates",
@@ -199,6 +200,9 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 		  	for (objects in responseObj) {
 		  		if (responseObj[objects].type=="line-graph") {
 		  			dashLineCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name);
+		  		}
+		  		if (responseObj[objects].type=="pie-graph") {
+		  			dashPieCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name);
 		  		}
 		  		if (responseObj[objects].type=="table") {
 		  			var headersVar = buildHeaderArray(responseObj[objects].headers);

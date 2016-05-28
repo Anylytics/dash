@@ -60,6 +60,13 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 			_getStuff('getUsers','users');
 			toggleLoading(false);
 		},
+    leaveGroup: function ( event ) {
+      toggleLoading(true);
+			var userKeypath = event.keypath;
+			var thisUser = userAdmin.get(userKeypath);
+      console.log(event);
+      toggleLoading(false);
+    },
 		getGroups: function ( event ) {
 			toggleLoading(true);
 			_getStuff('getGroups','groups');
@@ -90,7 +97,7 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 			_getStuff('getTemplates','templates');
 			toggleLoading(false);
 		},
-		createTemplate: function ( event ) { 
+		createTemplate: function ( event ) {
 			toggleLoading(true);
 			var templateObj = userAdmin.get("templateCreationObject");
 			var blankTemplateObj = {
