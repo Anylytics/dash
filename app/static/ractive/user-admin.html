@@ -79,6 +79,7 @@
 					<tr>
 						<th>Username</th>
 						<th>Email</th>
+						<th>Password</th>
 						<th>Groups</th>
 						<th>DELETE</th>
 					</tr>
@@ -88,6 +89,14 @@
 						<tr>
 							<td>{{this.username}}</td>
 							<td>{{this.email}}</td>
+							<td style="width:250px">
+							  <div class="input-group">
+							    <input type="text" class="form-control" placeholder="Update Password">
+							    <span class="input-group-btn">
+							      <button class="btn btn-success" type="button" on-click="updatePw">Save</button>
+							    </span>
+							  </div>
+							</td>
 							<td>
 								{{#each this.groups}}
 									<span class="template-pill">

@@ -298,7 +298,7 @@ h4 > .glyphicon {
 span.template-pill {
     display: inline-block;
     padding: 5px;
-    background-color: #009688;
+    background-color: #565656;
     color: white;
     margin: 2px;
     border-radius: 4px;
@@ -433,6 +433,11 @@ h2.admin-section {
 
 .btn-small {
 	padding:1px 2px;
+}
+
+.deleting {
+    transition: opacity 3s linear;
+    opacity: 0;
 }
 
 

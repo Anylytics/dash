@@ -60,9 +60,24 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 			_getStuff('getUsers','users');
 			toggleLoading(false);
 		},
+    updatePw: function ( event ) {
+      toggleLoading(true);
+      var thisPassword = event.node.parentNode.parentNode.getElementsByTagName("input")[0].value;
+			var userKeypath = event.keypath;
+			var thisUser = userAdmin.get(userKeypath).username;
+      var dataToSend = {
+        'username':thisUser,
+        'password':thisPassword
+      };
+      _runAPI('POST','changePassword',dataToSend);
+			_getStuff('getUsers','users');
+      toggleLoading(false);
+      event.node.parentNode.parentNode.getElementsByTagName("input")[0].value = "";
+    },
     leaveGroup: function ( event ) {
       toggleLoading(true);
 			var groupKeypath = event.keypath;
+      //event.node.parentNode.className += " deleting";
 			var thisGroup = userAdmin.get(groupKeypath);
       var keypathParsed = groupKeypath.split('.');
       var userKeypath = keypathParsed[0]+'.'+keypathParsed[1];
