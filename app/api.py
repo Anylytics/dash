@@ -280,3 +280,32 @@ def api_get_templates():
 	for template in templates:
 		templates_json.append(template.get_json())
 	return jsonify(response = templates_json)
+
+@app.route('/api/v1.0/changePassword', methods=['GET','POST'])
+@auth.login_required
+def api_change_password():
+	user = g.user
+	if isadmin(user):
+		valid_users = User.query.filter_by(active=True).all()
+	else:
+		valid_users = [user]
+	if request.method == 'GET':
+		users_json = map(lambda x: x.get_json(), valid_users)
+		return jsonify(response=users_json)
+	elif request.method == 'POST':
+		if not request.json:
+			abort(400)
+		if 'username' not in request.json or 'password' not in request.json:
+			abort(400)
+		userToChange = User.query.filter_by(active=True).filter_by(username=request.json['username']).first()
+		if userToChange not in valid_users:
+			abort(401)
+		userToChange.password = bcrypt.generate_password_hash(request.json['password'])
+		action = Action(action = "Changing Password", timestamp = datetime.utcnow(), user = user)
+		db.session.add(action)
+		db.session.commit()
+		return "SUCESSS", 200
+
+
+
+

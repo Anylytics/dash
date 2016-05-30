@@ -24,6 +24,8 @@ class User(db.Model):
         secondary = userGroup,
         back_populates="users")
 	password = db.Column(db.String)
+	numLogins = db.Column(db.Integer, default = 0)
+	
 
 	def is_authenticated(self):
 		return True

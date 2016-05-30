@@ -63,6 +63,7 @@ def login():
 		else:
 			if bcrypt.check_password_hash(user.password.encode('utf-8'), form.password.data):
 				user.authenticated = True
+				#user.numLogins += 1
 				action = Action(action="Log In", timestamp=datetime.utcnow(), user=user)
 				db.session.add(action)
 				db.session.commit()
@@ -76,6 +77,7 @@ def login():
 def home_page():
 	user=g.user
 	session.clear()
+	actions = Action.query.filter_by(user=user).filter_by(action='Log In').first()
 	updates = [  # fake array of updates
 		{ 
 			'user': {'nickname': 'Nabil', 'initial':'N'}, 
@@ -90,6 +92,12 @@ def home_page():
 			'status': 'New analysis available' 
 		}
 	]
+	print actions
+	if actions is None:
+		updates.append({
+			'user': {'nickname': user.username, 'initial':user.username[0]},
+			'status': 'First Login -- reset your password'
+		})
 	return render_template('index.html', name='home', user=user, updates=updates)
 
 
