@@ -270,6 +270,17 @@ def api_get_user():
 	else:
 		abort(401)
 
+@app.route('/api/v1.0/getTemplatesAdmin', methods=['GET'])
+@auth.login_required
+def api_get_templates_admin():
+	user = g.user
+	if isadmin(user):
+		templates = Template.query.filter_by(active = True).all()
+		templates_json = map(lambda x: x.get_json(), templates)
+		return jsonify(response = templates_json)
+	else:
+		abort(401)
+
 @app.route('/api/v1.0/getTemplates', methods=['GET'])
 @auth.login_required
 def api_get_templates():

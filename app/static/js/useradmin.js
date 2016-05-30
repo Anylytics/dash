@@ -129,7 +129,7 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 		},
 		getTemplates: function ( event ) {
 			toggleLoading(true);
-			_getStuff('getTemplates','templates');
+			_getStuff('getTemplatesAdmin','templates');
 			toggleLoading(false);
 		},
 		createTemplate: function ( event ) {
@@ -140,7 +140,7 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 			};
 			_runAPI('POST','createTemplate',templateObj);
 			userAdmin.set("templateCreationObject",blankTemplateObj);
-			_getStuff('getTemplates','templates');
+			_getStuff('getTemplatesAdmin','templates');
 			toggleLoading(false);
 		},
 		deleteTemplate: function ( event ) {
@@ -150,7 +150,7 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 			console.log(thisTemplate);
 			_runAPI('POST','deleteTemplate',thisTemplate);
 			_getStuff('getGroups','groups');
-			_getStuff('getTemplates','templates');
+			_getStuff('getTemplatesAdmin','templates');
 			toggleLoading(false);
 		},
 		addUserToGroup: function ( event ) {
@@ -223,7 +223,7 @@ define([ 'ractive', 'rv!../ractive/user-admin',  'jquery', 'dashglobals'], funct
 
 	_getStuff('getUsers','users');
 	_getStuff('getGroups','groups');
-	_getStuff('getTemplates','templates');
+	_getStuff('getTemplatesAdmin','templates');
 
 	function toggleLoading( setTo ) {
 		userAdmin.set("errorMessage","");
