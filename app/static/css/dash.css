@@ -306,6 +306,14 @@ span.template-pill {
     font-family: sans-serif;
 }
 
+.alert {
+		transition: all 0.4s ease-in-out;
+    position: fixed;
+    top: 10px;
+    z-index: 1000;
+    left: 10px;
+}
+
 tr.line-separated {
 	border-top: solid 1px gainsboro;
 	border-bottom: solid 1px gainsboro;

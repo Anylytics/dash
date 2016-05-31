@@ -6,9 +6,10 @@ function dashCharts(type) {
 	this.type = type;
 	if (this.type=="line") {
 		this.buildChart = buildLineChart;
-	}
-	if (this.type=="pie") {
-		this.buildChart = buildLineChart;
+	} else if (this.type =="bar"){
+		this.buildChart = buildBarChart
+	} else if (this.type =="pie"){
+		this.buildChart = buildPieChart
 	}
 }
 
@@ -77,6 +78,71 @@ function buildLineChart(dataObj, chartID) {
 	$(chartID+'-legend').html(myLineChart.generateLegend());
 }
 
+
+//Punit adding new charts
+
+
+function buildBarChart(dataObj, chartID) {
+	var ctx = $(chartID).get(0).getContext("2d");
+	var labelArray = [];
+	var groupArray = [];
+	var dataObjArray = dataObj.rows;
+
+	for (dataObj in dataObjArray) {
+		var foundMatch = false;
+		for (group in groupArray) {
+			if (groupArray[group]==dataObjArray[dataObj].group) {
+				foundMatch = true;
+			}
+		}
+		if (!foundMatch) {
+			groupArray.push(dataObjArray[dataObj].group)
+		}
+	}
+
+	for (dataObj in dataObjArray) {
+		labelArray.push(dataObjArray[dataObj].label);
+	}
+
+	var uniqueNames = [];
+	$.each(labelArray, function(i, el){
+	    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+	});
+
+	labelArray=uniqueNames;
+
+	var dataSetArray = [];
+	for (groupVal in groupArray) {
+		var tmpObj = {};
+		tmpObj.data = [];
+		tmpObj.label = groupArray[groupVal];
+		//tmpObj.bezierCurve = false;
+		tmpObj.fillColor 				= dashChartThemes[groupVal].fillColor;//"rgba(151,187,205,0.2)";
+		tmpObj.strokeColor 				= dashChartThemes[groupVal].strokeColor;//"rgba(151,187,205,1)";
+		tmpObj.pointColor 				= dashChartThemes[groupVal].pointColor;//"rgba(151,187,205,1)";
+		tmpObj.pointStrokeColor 		= dashChartThemes[groupVal].pointStrokeColor;//"#fff";
+		tmpObj.pointHighlightFill 		= dashChartThemes[groupVal].pointHighlightFill;//"#fff";
+		tmpObj.pointHighlightStroke 	= dashChartThemes[groupVal].pointHighlightStroke;//"rgba(151,187,205,1)";
+		for (dataObj in dataObjArray) {
+			if (groupArray[groupVal]==dataObjArray[dataObj].group) {
+				tmpObj.data.push(dataObjArray[dataObj].value);
+			}
+		}
+		dataSetArray.push(tmpObj);
+	}
+
+	var dataBarChart = {
+    	labels: labelArray,
+    	datasets: dataSetArray,
+    	responsive:true,
+    	legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><div class=\"legendBox\" style=\"background-color:<%=segments[i].fillColor%>\"></div><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+    };
+
+	var myBarChart = new Chart(ctx).Bar(dataBarChart, {responsive:true});
+	$(chartID+'-legend').html(myBarChart.generateLegend());
+}
+
+
 function buildPieChart(dataObj, chartID) {
 	var ctx = $(chartID).get(0).getContext("2d");
 	var labelArray = [];
@@ -112,33 +178,27 @@ function buildPieChart(dataObj, chartID) {
 		tmpObj.data = [];
 		tmpObj.label = groupArray[groupVal];
 		//tmpObj.bezierCurve = false;
-		/*tmpObj.fillColor 				= dashChartThemes[groupVal].fillColor;//"rgba(151,187,205,0.2)";
+		tmpObj.fillColor 				= dashChartThemes[groupVal].fillColor;//"rgba(151,187,205,0.2)";
 		tmpObj.strokeColor 				= dashChartThemes[groupVal].strokeColor;//"rgba(151,187,205,1)";
 		tmpObj.pointColor 				= dashChartThemes[groupVal].pointColor;//"rgba(151,187,205,1)";
 		tmpObj.pointStrokeColor 		= dashChartThemes[groupVal].pointStrokeColor;//"#fff";
 		tmpObj.pointHighlightFill 		= dashChartThemes[groupVal].pointHighlightFill;//"#fff";
-		tmpObj.pointHighlightStroke 	= dashChartThemes[groupVal].pointHighlightStroke;//"rgba(151,187,205,1)";*/
+		tmpObj.pointHighlightStroke 	= dashChartThemes[groupVal].pointHighlightStroke;//"rgba(151,187,205,1)";
 		for (dataObj in dataObjArray) {
 			if (groupArray[groupVal]==dataObjArray[dataObj].group) {
-				var thisDataObj = {};
-				thisDataObj.value = dataObjArray[dataObj].value;
-				thisDataObj.color = dashChartThemes[dataObj].fillColor;
-				thisDataObj.highlight = dashChartThemes[dataObj].pointHighlightFill;
-				//tmpObj.data.push(dataObjArray[dataObj].value);
-				tmpObj.data.push(thisDataObj);
+				tmpObj.data.push(dataObjArray[dataObj].value);
 			}
 		}
 		dataSetArray.push(tmpObj);
 	}
 
-	var dataChart = {
+	var dataPieChart = {
     	labels: labelArray,
     	datasets: dataSetArray,
     	responsive:true,
-    	bezierCurve:false,
     	legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><div class=\"legendBox\" style=\"background-color:<%=segments[i].fillColor%>\"></div><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
     };
 
-	var myPieChart = new Chart(ctx).Pie(dataChart, {responsive:true});
+	var myPieChart = new Chart(ctx).Bar(dataPieChart, {responsive:true});
 	$(chartID+'-legend').html(myPieChart.generateLegend());
 }
