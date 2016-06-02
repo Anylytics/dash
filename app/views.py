@@ -26,7 +26,7 @@ def is_json(myjson):
 @auth.verify_password
 def verify_password(username, password):
 	user = User.query.filter_by(username=username, active = True).first()
-	if not user: 
+	if not user:
 		return False
 	if bcrypt.check_password_hash(user.password.encode('utf-8'), password) == False:
 		return False
@@ -44,7 +44,7 @@ def g_login_required(group="ANY"):
 			   return lm.unauthorized()
 			group_object = Groups.query.filter_by(groupName=group, active = True).first()
 			if ( (group_object not in current_user.groups) and (group != "ANY")):
-				return lm.unauthorized()      
+				return lm.unauthorized()
 			return fn(*args, **kwargs)
 		return decorated_view
 	return wrapper
@@ -79,17 +79,17 @@ def home_page():
 	session.clear()
 	actions = Action.query.filter_by(user=user).filter_by(action='Log In').first()
 	updates = [  # fake array of updates
-		{ 
-			'user': {'nickname': 'Nabil', 'initial':'N'}, 
-			'status': 'New report posted' 
+		{
+			'user': {'nickname': 'Nabil', 'initial':'N'},
+			'status': 'New report posted'
 		},
-		{ 
-			'user': {'nickname': 'Gokul', 'initial':'G'}, 
-			'status': 'Data uploaded' 
+		{
+			'user': {'nickname': 'Gokul', 'initial':'G'},
+			'status': 'Data uploaded'
 		},
-		{ 
-			'user': {'nickname': 'Nitin', 'initial':'N'}, 
-			'status': 'New analysis available' 
+		{
+			'user': {'nickname': 'Nitin', 'initial':'N'},
+			'status': 'New analysis available'
 		}
 	]
 	print actions
@@ -193,7 +193,7 @@ def load_user(id):
 @app.route('/api/v1.0/getData', methods=['POST'])
 def get_data():
 	print request.json
-	if not request.json or not 'template' in request.json: 
+	if not request.json or not 'template' in request.json:
 		abort(400)
 	#First get the associated template
 	template = Template.query.filter_by(name=request.json['template'], active = True).first()
@@ -208,12 +208,12 @@ def get_data():
 		response.append(data.file_id)
 		response.append(file_selected.name)
 	return jsonify(response = response)
-	
+
 
 def upload_data_worker(user, template, data, file_id=None):
 	if template is None or user is None or data is None:
 		return 400
-	#Grab all the templates the user can upload to 
+	#Grab all the templates the user can upload to
 	templates = set()
 	for group in user.groups:
 		#Get all the templates in this group
@@ -259,7 +259,7 @@ def upload_file():
 			db.session.add(file_db)
 			db.session.commit()
 			return jsonify({'file_id': file_db.id})
-	#TODO: This is debug code, perhaps we should remove it? 
+	#TODO: This is debug code, perhaps we should remove it?
 	return '''
 	<!doctype html>
 	<title>Upload new File</title>
@@ -270,7 +270,7 @@ def upload_file():
 		 <input type=submit value=Upload>
 	</form>
 	'''
-			
+
 
 @app.route('/api/v1.0/getupload/<file_id>')
 def uploaded_file(file_id):
@@ -279,5 +279,3 @@ def uploaded_file(file_id):
 		return send_from_directory(app.config['UPLOAD_FOLDER'], file_selected.filename)
 	else:
 		abort(201)
-
-
