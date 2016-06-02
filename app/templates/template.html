@@ -33,8 +33,9 @@
 						{% if user %}
 							Welcome, {{user.username}}
 						{% endif %}
-  						<button type="button" class="btn btn-default btn-xs"><a id="logout" href="{{ url_for('logout') }}">Logout</a></button>
-					</div>
+            <!--button type="button" class="btn btn-default btn-xs"><a id="logout" href="{{ url_for('logout') }}">Logout</a></button-->
+            <button type="button" class="btn btn-default btn-xs"><a id="logout" href="/logout">Logout</a></button>
+        </div>
 				{% endif %}
 
     {% with messages = get_flashed_messages() %}
