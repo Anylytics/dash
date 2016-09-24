@@ -5,6 +5,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	Ractive.partials.loadingWidget = load;
 	var dashLineCharts = new dashCharts('line');
 	var dashPieCharts = new dashCharts('pie');
+	var dashTables = new dashCharts('table');
 
 
     var tableHistoryThree = new Ractive({
@@ -190,55 +191,23 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 		  			rawData[objects].type="table";
 		  		}
 		  	}
-		  	console.log(rawData);
-		  	//console.log(file_id);
-		  	//console.log(filename)
+
 		  	tableHistoryThree.set("response", rawData);
 		  	tableHistoryThree.set("file_id",file_id);
 		  	tableHistoryThree.set("filename", filename);
 		  	var responseObj = tableHistoryThree.get("response");
 		  	for (objects in responseObj) {
+
 		  		if (responseObj[objects].type=="line-graph") {
 		  			dashLineCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name);
 		  		}
+
 		  		if (responseObj[objects].type=="pie-graph") {
 		  			dashPieCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name);
 		  		}
+
 		  		if (responseObj[objects].type=="table") {
-	  			var headersVar = buildHeaderArray(responseObj[objects].headers);
-					var dataVar = buildRowArray(responseObj[objects].rows,headersVar);
-					var rawData = responseObj[objects].rows;
-
-					for (var header in headersVar) {
-						//console.log(headersVar[header]);
-					}
-
-				    $('#'+responseObj[objects].name).DataTable({
-				    	"columns":headersVar,
-				    	"data":dataVar,
-				    	"paging":false,
-				    	"info":false,
-							"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-							  //console.log(nRow);
-								//console.log(rawData[iDisplayIndex]);
-								var row_styling = rawData[iDisplayIndex].row_styling;
-								if (row_styling) {
-									for (var i = 0; i<row_styling.length; i++) {
-										var thisStyle = row_styling[i];
-										if (thisStyle) {
-											for (var style in thisStyle) {
-												console.log( style );
-												$('td:eq('+i+')', nRow)[0].style[style] = thisStyle[style];
-											}
-
-										}
-									}
-								}
-								//console.log(aData);
-								//console.log(iDisplayIndex);
-								//console.log(iDisplayIndexFull);
-							},
-				    });
+		  			dashTables.buildChart(responseObj[objects]);
 		  		}
 
 		  	}

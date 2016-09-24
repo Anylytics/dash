@@ -4,12 +4,22 @@
 
 function dashCharts(type) {
 	this.type = type;
-	if (this.type=="line") {
-		this.buildChart = buildLineChart;
-	} else if (this.type =="bar"){
-		this.buildChart = buildBarChart
-	} else if (this.type =="pie"){
-		this.buildChart = buildPieChart
+	switch(this.type) {
+	  case 'line':
+			this.buildChart = buildLineChart;
+      break;
+	  case 'bar':
+			this.buildChart = buildBarChart;
+      break;
+		case 'pie':
+			this.buildChart = buildPieChart;
+			break;
+		case 'table':
+			this.buildChart = buildTable;
+			break;
+	  default:
+	    console.error("Chart type not found");
+			break;
 	}
 }
 
@@ -78,10 +88,7 @@ function buildLineChart(dataObj, chartID) {
 	$(chartID+'-legend').html(myLineChart.generateLegend());
 }
 
-
-//Punit adding new charts
-
-
+// TODO: Fix up bar charts
 function buildBarChart(dataObj, chartID) {
 	var ctx = $(chartID).get(0).getContext("2d");
 	var labelArray = [];
@@ -142,7 +149,7 @@ function buildBarChart(dataObj, chartID) {
 	$(chartID+'-legend').html(myBarChart.generateLegend());
 }
 
-
+// TODO: Fix up pie charts
 function buildPieChart(dataObj, chartID) {
 	var ctx = $(chartID).get(0).getContext("2d");
 	var labelArray = [];
@@ -201,4 +208,32 @@ function buildPieChart(dataObj, chartID) {
 
 	var myPieChart = new Chart(ctx).Bar(dataPieChart, {responsive:true});
 	$(chartID+'-legend').html(myPieChart.generateLegend());
+}
+
+function buildTable(dataObj) {
+
+		var headersVar = buildHeaderArray(dataObj.headers);
+		var dataVar = buildRowArray(dataObj.rows,headersVar);
+		var rawData = dataObj.rows;
+
+		$('#'+dataObj.name).DataTable({
+			"columns":headersVar,
+			"data":dataVar,
+			"paging":false,
+			"info":false,
+			"fnCreatedRow": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+				var row_styling = rawData[iDisplayIndex].row_styling;
+				if (row_styling) {
+					for (var i = 0; i<row_styling.length; i++) {
+						var thisStyle = row_styling[i];
+						$('td:eq('+i+')', nRow)[0].style = null;
+						if (thisStyle) {
+							for (var style in thisStyle) {
+								$('td:eq('+i+')', nRow)[0].style[style] = thisStyle[style];
+							}
+						}
+					}
+				}
+			},
+		});
 }
