@@ -5,6 +5,7 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	Ractive.partials.loadingWidget = load;
 	var dashLineCharts = new dashCharts('line');
 	var dashPieCharts = new dashCharts('pie');
+	var dashBarCharts = new dashCharts('bar');
 	var dashTables = new dashCharts('table');
 
 
@@ -168,6 +169,9 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 	});
 
 	function getReportData(templateName) {
+		if (!templateName) {
+			templateName = $("#templateBox").val();
+		}
 		toggleLoading();
 		tableHistoryThree.set("response", {});
 		$.ajax({
@@ -205,6 +209,10 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 		  		if (responseObj[objects].type=="pie-graph") {
 		  			dashPieCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name);
 		  		}
+		  		if (responseObj[objects].type=="bar-graph") {
+		  			dashBarCharts.buildChart(responseObj[objects],'#'+responseObj[objects].name);
+		  		}
+
 
 		  		if (responseObj[objects].type=="table") {
 		  			dashTables.buildChart(responseObj[objects]);
@@ -231,6 +239,10 @@ define([ 'ractive', 'rv!../ractive/reports-page', 'rv!../ractive/loading-widget'
 
 
 	$("#templateBox").change(function() {
+		getReportData($("#templateBox").val());
+	});
+
+	$("#templateRefresh").click(function() {
 		getReportData($("#templateBox").val());
 	});
 

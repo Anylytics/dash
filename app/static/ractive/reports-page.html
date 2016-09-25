@@ -38,6 +38,9 @@
 						<option value="{{this.name}}">{{this.name}}</option>
 					{{/each}}
 				</select>
+				<button class="pull-right btn btn-default">
+					<i class="glyphicon glyphicon-refresh" id="templateRefresh"></i>
+				</button>
 			</div><!--End Content-->
 		</div>
 	</div><!--End col-sm-6-->
@@ -74,6 +77,14 @@
 					<table id="{{this.name}}" class="display" width="100%"></table>
 				{{/if}}
 				{{#if this.type=="line-graph"}}
+					<canvas id="{{this.name}}" style="width:100%;"></canvas>
+					<div id="{{this.name}}-legend" class="dash-legends"></div>
+				{{/if}}
+				{{#if this.type=="pie-graph"}}
+					<canvas id="{{this.name}}" style="width:100%;"></canvas>
+					<div id="{{this.name}}-legend" class="dash-legends"></div>
+				{{/if}}
+				{{#if this.type=="bar-graph"}}
 					<canvas id="{{this.name}}" style="width:100%;"></canvas>
 					<div id="{{this.name}}-legend" class="dash-legends"></div>
 				{{/if}}

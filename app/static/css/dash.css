@@ -236,7 +236,7 @@ body {
 }
 
 .dash-widget-content {
-	padding:10px;
+	padding-top:10px;
 }
 
 .dash-widget-content > span {
@@ -404,8 +404,8 @@ body {
 	margin-bottom: 200px;
 }
 
-.line-legend {
-	display:inline;
+.line-legend, .pie-legend, .bar-legend {
+	//display:inline;
 	list-style:none;
 	padding:10px;
 	padding-right:20px;
@@ -415,18 +415,29 @@ body {
 	border-radius:5px;
 }
 
-.line-legend:hover {
+.line-legend:hover, .pie-legend:hover, .bar-legend:hover {
 	border-color:black;
 }
+.dash-widget-content {
+  overflow-x: auto;
+}
+.dash-widget-content > canvas {
+	//max-width: 100%;
+}
 
-.line-legend > li > span {
+#templateBox {
+	max-width:80%;
+	display: inline-block;
+}
+
+.line-legend > li > span, .pie-legend > li > span , .bar-legend > li > span {
     display: inline-block;
     margin-right: 10px;
     height: 10px;
     width: 10px;
 }
 
-.line-legend > li {
+.line-legend > li, .pie-legend > li, .bar-legend > li {
     display: inline-block;
     margin-left:20px;
 }
